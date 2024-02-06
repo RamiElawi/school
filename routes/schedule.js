@@ -1,10 +1,10 @@
 const router=require('express').Router();
-const scheduleController=require('../controller');
+const scheduleController=require('../controller/schedule');
+const isAuth=require('../config/isAuth')
+router.post('/addDate',isAuth,scheduleController.addDate);
 
-// router.post('/addDate',scheduleController);
+router.put('/updateDate',isAuth,scheduleController.updateDate);
 
-// router.put('updateDate',scheduleController);
-
-// router.delete('deleteDate',scheduleController);
+router.delete('/deleteDate',isAuth,scheduleController.deleteDate);
 
 module.exports=router;

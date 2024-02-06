@@ -11,10 +11,37 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Section.belongsTo(models.Class)
+      Section.belongsToMany(models.subject,{through:models.schedules})
+      Section.hasMany(models.User)
     }
   }
   Section.init({
-    number: DataTypes.INTEGER
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
+    sectionNumber: DataTypes.INTEGER,
+    maxNumberOfStudent:DataTypes.INTEGER,
+    classId:{
+      type:DataTypes.INTEGER,
+      references:{
+        model:'classes',
+        key:'id'
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE'
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Section',

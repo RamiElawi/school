@@ -3,6 +3,7 @@ const authController=require('../controller/auth')
 const {body}=require('express-validator')
 const db=require('../models')
 let User=db.User;
+const isAuth=require('../config/isAuth')
 
 router.post('/signup',
 [
@@ -56,7 +57,7 @@ router.post('/resetPssword',
 ]
 ,authController.resetPassword)
 
-router.put('/newPassword/:restToken',
+router.put('/newPassword/:resetToken',
 [
     body('newPassword')
     .trim()
@@ -74,6 +75,7 @@ router.put('/newPassword/:restToken',
 ]
 ,authController.newPassword);
 
-// router.delete('/logout',authController)
+router.delete('/logout',isAuth,authController.logout)
+
 
 module.exports=router;

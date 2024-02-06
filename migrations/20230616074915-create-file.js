@@ -3,15 +3,26 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('files', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      path: {
-        type: Sequelize.STRING
-      },
+      id:{
+        type:Sequelize.INTEGER,
+        allowNull:false,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    path:{
+      type:Sequelize.STRING
+    },
+    name:{
+      type:Sequelize.STRING
+    },
+    fileableId:{
+        type:Sequelize.INTEGER,
+        allowNull:false
+    },
+    fileableType:{
+        type:Sequelize.ENUM('Personal','Lesson'),
+        allowNull:false
+    },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

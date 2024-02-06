@@ -1,7 +1,7 @@
 const db=require('../models')
 const clearImage=require('../config/clearImage')
 exports.addSubject=async(req,res,next)=>{
-    const {name}=req.body;
+    const {name,minimumSuccess}=req.body;
     try{
         if(!req.file){
             const error=new Error('there is no file')
@@ -10,7 +10,8 @@ exports.addSubject=async(req,res,next)=>{
         }
         const subject=await db.subject.create({
             name:name,
-            subjectImage:req.file.image
+            image:req.file.image,
+            minimumSuccess:minimumSuccess
         })
         return res.status(200).json({message:'the subject has been created'})
     }catch(err){
@@ -22,7 +23,7 @@ exports.addSubject=async(req,res,next)=>{
 }
 
 exports.updateSubject=async(req,res,next)=>{
-    const {name}=req.body;
+    const {name,minimumSuccess}=req.body;
     const subjectId=req.params.subjectId;
 
     try{
@@ -38,6 +39,7 @@ exports.updateSubject=async(req,res,next)=>{
         }
         subject.subjectImage=subject_image;
         subject.name=name;
+        subject.minimumSuccess=minimumSuccess
         await subject.save();
         return res.status(200).json({message:'subject has been updated'})
     }catch(err){
@@ -104,7 +106,7 @@ try{
 }
 
 exports.addReferance=async(req,res,next)=>{
-    const {description}=req.body;
+    const {description,name}=req.body;
     const subjectId=req.params.subjectId;
 
     try{
@@ -117,7 +119,9 @@ exports.addReferance=async(req,res,next)=>{
         await db.referance.create({
             description:description,
             subjectId:subjectId,
-            path:req.files.file[0].path
+            path:req.files.file[0].path,
+            name:name,
+            teacherId:req.userId
         })
     
         return res.status(200).json({message:'done'})
@@ -130,18 +134,22 @@ exports.addReferance=async(req,res,next)=>{
 }
 
 exports.updateReferance=async(req,res,next)=>{
-    const {description}=req.body;
+    const {description,name}=req.body;
     const subjectId=req.params.subjectId
     const referanceId=req.params.referanceId
     let file;
     try{
         const subject=await db.subject.findOne({where:{id:subject}})
         if(!subject){
-
+            const error=new Error('this subject is not found')
+            error.statusCode=422;
+            throw error;
         }
         const referance=await db.referance.findOne({where:{id:referanceId}})
         if(!referance){
-
+            const error=new Error('this referance is not found')
+            error.statusCode=422;
+            throw error;
         }
         file=referance.path;
         if(req.files.file){
@@ -149,7 +157,10 @@ exports.updateReferance=async(req,res,next)=>{
         }
         referance.path=file;
         referance.description=description;
+        referance.name=name;
+        referance.subjectId=subjectId
         await referance.save();
+        return res.status(200).json({message:'referance has been updated'})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500;
@@ -159,17 +170,15 @@ exports.updateReferance=async(req,res,next)=>{
 }
 exports.deleteReferance=async(req,res,next)=>{
     const referanceId=req.params.referanceId;
-    const subjectId=req.params.subjectId;
     try{
-        const subject=await db.subject.findOne({where:{id:subjectId}})
-        if(!subject){
-
-        }
         const referance=await db.referance.findOne({where:{id:referanceId}})
         if(!referance){
-    
+            const error=new Error('this referance is not found')
+            error.statusCode=422;
+            throw error;
         }
         await referance.destroy()
+        return res.status(200).json({message:'referance has been deleted'})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500;
@@ -182,6 +191,11 @@ exports.getReferance=async(req,res,next)=>{
     const subjectId=req.parms.subjectId;
     try{
         const referances=await db.referance.findAll({where:{subjectId:subjectId}})
+        if(!referances){
+            const error=new Error('there are no referances')
+            error.statusCode=422;
+            throw error;
+        }
         return res.status(200).json({referances:referances})
     }catch(err){
         if(!err.statusCode){

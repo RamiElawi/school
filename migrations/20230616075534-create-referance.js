@@ -9,8 +9,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      name:{
+        type:Sequelize.STRING
+      },
       path: {
         type: Sequelize.STRING
+      },
+      subjectId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'subjects',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
+      },
+      teacherId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'users',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
       },
       createdAt: {
         allowNull: false,

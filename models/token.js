@@ -11,10 +11,37 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      token.belongsTo(models.User)
+
     }
   }
   token.init({
-    token: DataTypes.STRING
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
+    token: {
+      type: DataTypes.STRING
+    },
+    userId:{
+      type:DataTypes.INTEGER,
+      references:{
+        key:'id',
+        model:'users'
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE'
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'token',

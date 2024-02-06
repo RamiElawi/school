@@ -21,4 +21,7 @@ const upload=multer({storage:storageFile})
 
 // router.post('/')
 
+// router.post('/addRate/:userId',isAuth,userController)
+
+// router.put('/updateRate/:userId',isAuth,userController)
 module.exports=router;

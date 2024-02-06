@@ -1,5 +1,6 @@
 const router=require('express').Router();
 const subjectController=require('../controller/subject')
+const isAuth=require('../config/isAuth')
 const multer=require('multer');
 const storageFile=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -13,25 +14,26 @@ const storageFile=multer.diskStorage({
 
  const upload=multer({storage:storageFile})
 
-// router.post('/addSubject',isAuth,upload.single('image'),subjectController);
+router.post('/addSubject',isAuth,upload.single('image'),subjectController.addSubject);
 
-// router.put('/updateSubject/:subjectId',isAuth,single('image'),subjectController)
+router.put('/updateSubject/:subjectId',isAuth,upload.single('image'),subjectController.updateSubject)
 
-// router.delete('/deleteSubject/:subjectId',isAuth,subjectController)
+router.delete('/deleteSubject/:subjectId',isAuth,subjectController.deleteSubject)
 
-// router.get('/getAllSubject',subjectController)
+router.get('/getAllSubject',subjectController.getSubjects)
 
-// router.get('/getSubject/:subjectId',subjectController)
+router.get('/getSubject/:subjectId',subjectController.getSubject)
 
-// router.post('/:subjectId/addRreferance',isAuth,upload.fields([{name:'file'}]),subjectController)
+router.post('/:subjectId/addRreferance',isAuth,upload.fields([{name:'file'}]),subjectController.addReferance)
 
-// router.put('/:subjectId/updateRreferance/:referanceId',isAuth,upload.single('file'),subjectController)
+router.put('/:subjectId/updateRreferance/:referanceId',isAuth,upload.single('file'),subjectController.updateReferance)
 
-// router.delete('/:subjectId/deleteReferance/:referanceId',isAuth,subjectController)
+router.delete('/:subjectId/deleteReferance/:referanceId',isAuth,subjectController.deleteReferance)
 
-// router.get('/:subjectId/getReferance',isAuth,subjectController)
+router.get('/:subjectId/getReferance',isAuth,subjectController.getReferance)
 
 
+// add another way to get a referance
 
 
 module.exports=router;

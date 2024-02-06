@@ -1,19 +1,19 @@
-const router=requier('express').Router();
+const router=require('express').Router();
 const markController=require('../controller/mark')
 const isAuth=require('../config/isAuth')
 
-// router.post('/addMark',isAuth,markController)
+router.post('/addMark',isAuth,markController.addMark)
 
-// router.put('/updateMark/:studentId',isAuth,markController)
+router.put('/updateMark/:studentId',isAuth,markController.updateMark)
 
-// router.delete('/deleteMark/:studentId',isAuth,markController)
+router.delete('/deleteMark/:studentId',isAuth,markController.deleteMark)
 
-// router.get('/getSubjectMarks/:subjectId',isAuth,markController)
+router.get('/getSubjectMarks/:subjectId',isAuth,markController.getSubjectMarks)
 
-// router.get('/getStudentMark')
+router.get('/getStudentMark',isAuth,markController.getStudentMark)
 
-// router.get('/getStudentMarks/:')
+router.get('/getStudentMarks/:studentId',isAuth,markController.getStudentMarks)
 
-
+// add another way to get mark
 
 module.exports=router;

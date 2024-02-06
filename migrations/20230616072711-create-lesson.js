@@ -11,6 +11,15 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING
+      }
+      ,subjectId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'subjects',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
       },
       createdAt: {
         allowNull: false,

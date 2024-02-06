@@ -12,6 +12,20 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      minimumSuccess:Sequelize.DOUBLE,
+      image:{
+        type:Sequelize.STRING,
+        allowNull:false
+      },
+      teacherId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'users',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

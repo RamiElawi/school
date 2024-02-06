@@ -11,10 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      answer.belongsTo(models.question)
+      // answer.belongsToMany(models.User,{through:models.user_answer})
+      answer.hasMany(models.user_answer)
+
     }
   }
   answer.init({
-    file: DataTypes.STRING
+    answer:{
+      type:DataTypes.STRING
+    },
+    questionId:{
+      type:DataTypes.INTEGER,
+      references:{
+        model:'questions',
+        key:'id'
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE'
+    }
   }, {
     sequelize,
     modelName: 'answer',

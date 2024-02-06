@@ -7,7 +7,7 @@ module.exports=(req,res,next)=>{
         error.statusCode=401;
         throw error;
     }
-    const token=authHeader.siplt('')[1];
+    const token=authHeader.split('')[1];
     let dedcodeToken;
     try{
         dedcodeToken=jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);

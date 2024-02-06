@@ -11,11 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Mark.belongsTo(models.User,{foreignKey:'studentId'})
+      Mark.belongsTo(models.subject,{foreignKey:'subjectId'})
+      Mark.belongsTo(models.User,{foreignKey:'teacherId'})
     }
   }
   Mark.init({
     mark: DataTypes.DOUBLE,
-    userId:{
+    studentId:{
+      type:DataTypes.INTEGER,
+      references:{
+        model:'users',
+        key:'id'
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE'
+    },
+    teacherId:{
       type:DataTypes.INTEGER,
       references:{
         model:'users',
@@ -34,10 +46,18 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate:'CASCADE'
     },
     year:{
-      type:DataTypes.Date
+      type:DataTypes.DATE
     },
     status:{
-      type:DataTypes.STRING
+      type:DataTypes.ENUM("SUCCESSFUL", "FAILED")
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
     }
   }, {
     sequelize,

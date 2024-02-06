@@ -9,8 +9,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      file: {
-        type: Sequelize.STRING
+      answer:{
+        type:Sequelize.STRING
+      },
+      questionId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'questions',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
       },
       createdAt: {
         allowNull: false,

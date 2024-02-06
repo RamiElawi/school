@@ -9,8 +9,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      number: {
+      sectionNumber: {
         type: Sequelize.INTEGER
+      },
+      maxNumberOfStudent:Sequelize.INTEGER,
+      classId:{
+        type:Sequelize.INTEGER,
+        references:{
+          model:'classes',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
       },
       createdAt: {
         allowNull: false,
