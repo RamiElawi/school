@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.token)
-      User.belongsTo(models.Section)
+      // User.belongsTo(models.Section)
       User.belongsToMany(models.lesson,{through:models.attendance})
       User.belongsToMany(models.effectiveness,{through:models.request})
       User.belongsToMany(models.subject,{through:models.referance})
@@ -20,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Mark)
       User.hasMany(models.rate,{foreignKey:'userId1'})
       User.hasMany(models.rate,{foreignKey:'userId2'})
+      User.hasMany(models.chat,{foreignKey:'senderId'})
+      User.hasMany(models.chat,{foreignKey:'reciverId'})
       User.hasMany(models.father,{foreignKey:'fatherId'})
       User.hasMany(models.father,{foreignKey:'studentId'})
       User.hasMany(models.schedules)
@@ -27,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.user_answer)
       User.hasOne(models.subject)
       User.belongsToMany(models.group,{through:models.group_user})
-      User.belongsToMany(models.group_user,{through:models.message})
+      User.belongsToMany(models.group,{through:models.message})
 
     }
   }

@@ -110,7 +110,7 @@ exports.deleteQuestion=async(req,res,next)=>{
 
 exports.chooseSubjectAnswer=async (req,res,next)=>{
     const {answers}=req.body;//[{question:1,answer:1},{question:2,answer:2}]
-    const {type,id}=req.params;
+    const {id}=req.params;
     const subjectStatus='FAILED'
     // const studentMark=0;
     try{

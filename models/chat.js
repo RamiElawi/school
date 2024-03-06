@@ -3,40 +3,38 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class group_user extends Model {
+  class chat extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      group_user.belongsTo(models.User)
-      group_user.belongsTo(models.group)
+      chat.belongsTo(models.User,{foreignKey:'senderId'})
+      chat.belongsTo(models.User,{foreignKey:'reciverId'})
     }
   }
-  group_user.init({
-    userId: {
-      type: DataTypes.INTEGER,
-      references:{
+  chat.init({
+    senderId:{type: DataTypes.INTEGER
+      ,references:{
         model:'users',
         key:'id'
       },
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    groupId: {
-      type: DataTypes.INTEGER,
-      references:{
-        model:'groups',
-        key:'id'
-      },
-      onDelete:'CASCADE',
-      onUpdate:'CASCADE'
+    reciverId:{type: DataTypes.INTEGER,
+    references:{
+      model:'users',
+      key:'id'
     },
+    onDelete:'CASCADE',
+    onUpdate:'CASCADE'
+  },
+    message: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'group_user',
+    modelName: 'chat',
   });
-  return group_user;
+  return chat;
 };

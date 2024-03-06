@@ -10,8 +10,8 @@ router.put('/updateQuestion/:questionId',isAuth,questionController.updateQuestio
 
 router.delete('/deleteQuestion/:questionId',isAuth,questionController.deleteQuestion)
 
-router.post('/chooseSubjectAnswer/:id',isAuth,questionController)//for subject
+router.post('/chooseSubjectAnswer/:id',isAuth,questionController.chooseSubjectAnswer)//for subject
 
-router.post('/chooseLessonAnswer',isAuth,questionController)
+router.post('/chooseLessonAnswer',isAuth,questionController.chooseLessonAnswer)
 
 module.exports=router

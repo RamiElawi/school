@@ -12,7 +12,7 @@ route.get('/getRequest/:requestId',isAuth,requestController.getRequest)
 
 route.get('/:effectId/allRequest',isAuth,requestController.getAllRequest)
 
-route.get('/getMyRequest',isAuth,requestController.getMyRequest.getMyRequest)
+route.get('/getMyRequest',isAuth,requestController.getMyRequest)
 
 route.get('/:effectId/getAcceptRequest',isAuth,requestController.getAcceptRequest)
 

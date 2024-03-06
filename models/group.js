@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       group.belongsToMany(models.User,{through:models.group_user})
+      group.belongsToMany(models.User,{through:models.message})
     }
   }
   group.init({
-    groupName: DataTypes.STRING
+    groupName: DataTypes.STRING,
+    groupImage:DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'group',

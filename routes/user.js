@@ -15,13 +15,11 @@ const storageFile=multer.diskStorage({
 
 const upload=multer({storage:storageFile})
 
-// router.get('/getProfile/:userId',isAuth,upload.single('userImage'),userController)
+router.get('/changeImage/:userId',isAuth,upload.single('userImage'),userController.changeImage)
 
-// router.post('/changeImage',isAuth,userController);
+router.get('/getProfile/:userId',isAuth,userController.getProfile);
 
-// router.post('/')
+router.post('/addRate/:userId',isAuth,userController.addRate)
 
-// router.post('/addRate/:userId',isAuth,userController)
-
-// router.put('/updateRate/:userId',isAuth,userController)
+router.get('/getRate/:userId',isAuth,userController.getRate)
 module.exports=router;

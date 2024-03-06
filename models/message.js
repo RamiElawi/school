@@ -12,16 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       message.belongsTo(models.User)
-      message.belongsTo(models.group_user)
+      message.belongsTo(models.group)
     }
   }
   message.init({
     text: DataTypes.STRING,
     date: DataTypes.DATE,
-    group_userId: {
+    groupId: {
       type: DataTypes.INTEGER,
       references:{
-        model:'group_users',
+        model:'groups',
         key:'id'
       },
       onDelete:'CASCADE',

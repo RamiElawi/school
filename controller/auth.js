@@ -78,7 +78,7 @@ exports.login=async(req,res,next)=>{
         }
         
         const {accessToken,refreshToken}=generateToken(user);
-        return res.status(200).json({message:'correct login',accessToken:accessToken||1,refershToken:refreshToken||1});
+        return res.status(200).json({message:'correct login',accessToken:accessToken,refershToken:refreshToken});
     } catch (err) {
         if(!err.statusCode){
             err.statusCode=500;

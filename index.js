@@ -1,11 +1,13 @@
 const express=require('express');
 const app=express();
+const Server=require('http').createServer(app)
 const bodyPareser=require('body-parser')
 const db=require('./models')
 const allRoutes=require('./routes')
 const cors=require('cors')
 const path=require('path')
 const socket=require('socket.io')
+require('dotenv').config()
 
 app.use(cors({
     origin:'*',
@@ -31,20 +33,10 @@ app.use((err,req,res,next)=>{
 
 
 
-
 db.sequelize
 .sync()
 .then(()=>{
-    const server=app.listen(8000,console.log('server is ready'));
-    var io=socket(server)
-    io.on('connection',socket=>{
-        console.log("user is connected",socket.id)
-
-        socket.on("join",roomName=>{
-            console.log(roomName)
-        })
-    })
-
+    const server=Server.listen(process.env.PORT || 8000,console.log('server is ready'));
 })
 .catch(err=>console.log(err))
 

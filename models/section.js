@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Section.belongsTo(models.Class)
       Section.belongsToMany(models.subject,{through:models.schedules})
-      Section.hasMany(models.User)
+      // Section.hasMany(models.User)
     }
   }
   Section.init({
