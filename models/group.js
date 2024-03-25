@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   group.init({
     groupName: DataTypes.STRING,
     groupImage:DataTypes.STRING,
+    isGroup:DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'group',

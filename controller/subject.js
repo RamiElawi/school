@@ -1,17 +1,19 @@
 const db=require('../models')
-const clearImage=require('../config/clearImage')
 exports.addSubject=async(req,res,next)=>{
-    const {name,minimumSuccess}=req.body;
+    const {name,minimumSuccess,teacherId}=req.body;
     try{
         if(!req.file){
             const error=new Error('there is no file')
             error.statusCode=422;
             throw error;
         }
+        console.log(req.file)
         const subject=await db.subject.create({
             name:name,
             image:req.file.image,
-            minimumSuccess:minimumSuccess
+            minimumSuccess:minimumSuccess,
+            teacherId:teacherId,
+            image:req.file.path
         })
         return res.status(200).json({message:'the subject has been created'})
     }catch(err){
@@ -27,15 +29,15 @@ exports.updateSubject=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
 
     try{
-        const subject=await db.subject.findById(subjectId)
+        const subject=await db.subject.findOne({Id:subjectId})
         if(!subject){
             const error=new Error('this subject is not found')
             error.statusCode=422;
             throw error;
         }
         let subject_image=subject.subjectImage;
-        if(req.file.image){
-            subject_image=req.file.image;
+        if(req.file){
+            subject_image=req.file.path;
         }
         subject.subjectImage=subject_image;
         subject.name=name;
@@ -53,13 +55,13 @@ exports.updateSubject=async(req,res,next)=>{
 exports.deleteSubject=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
     try{
-        const subject=await db.subject.findById(subjectId)
+        const subject=await db.subject.findOne({where:{id:subjectId}})
         if(!subject){
             const error=new Error('this subject is not found')
             error.statusCode=422;
             throw error;
         }
-        await clearImage(subject.subjectImage)
+        require('../config/clearImage').clearImage(subject.image)
         await subject.destroy();
         return res.status(200).json({message:"subject has been deleted"})
     }catch(err){
@@ -88,8 +90,9 @@ exports.getSubjects=async(req,res,next)=>{
 
 exports.getSubject=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
+    console.log(subjectId)
 try{
-    const subject=await db.subject.findById(subjectId);
+    const subject=await db.subject.findOne({where:{id:subjectId}});
     if(!subject){
         const error=new Error('this subject is not found')
         error.statusCode=422;

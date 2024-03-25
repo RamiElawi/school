@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       answer.belongsTo(models.question)
       // answer.belongsToMany(models.User,{through:models.user_answer})
       answer.hasMany(models.user_answer)
-
     }
   }
   answer.init({

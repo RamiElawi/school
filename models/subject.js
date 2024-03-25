@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       subject.belongsToMany(models.User,{through:models.Mark})
       subject.belongsToMany(models.Section,{through:models.schedules})
       subject.hasMany(models.question,{foreignKey:'questionableId',constraints:false,scope:{fileableType:'Subject'}})
-      subject.belongsTo(models.User)
+      subject.belongsTo(models.User,{foreignKey:"teacherId"})
     }
   }
   subject.init({

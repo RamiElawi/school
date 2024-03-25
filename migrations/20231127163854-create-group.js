@@ -15,6 +15,9 @@ module.exports = {
       groupImage:{
         type:Sequelize.STRING
       },
+      isGroup:{
+        type:Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
