@@ -3,13 +3,14 @@ const db=require('../models')
 exports.addQuestion=async (req,res,next)=>{
     const {text,rightAnswer,answers}=req.body
     const {type,id}=req.params
+    console.log(answers)
     try{
         const question=await db.question.create({
             title:text,
             questionableType:type,
             questionableId:id
         })
-         answers.foreach(async (answer)=>{
+         answers.forEach(async (answer)=>{
             await db.answer.create({
                 answer:answer,
                 questionId:question.id
@@ -42,16 +43,16 @@ exports.updateQuestion=async(req,res,next)=>{
         }
         question.text=text;
         await question.save()
-        const answers=await db.answer.findAll({where:{quesitonId:questionId}})
+        const answers=await db.answer.findAll({where:{questionId:questionId}})
         if(!answers){
             const error=new Error('there are no answers')
             error.statusCode=422;
             throw error
         }
-        answers.foreach(async (answer)=>{
+        answers.forEach(async (answer)=>{
             await answer.destroy()
         })
-        Answers.foreach(async (answer)=>{
+        Answers.forEach(async (answer)=>{
             await db.answer.create({
                 answer:answer,
                 questionId:question.id

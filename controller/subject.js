@@ -37,6 +37,7 @@ exports.updateSubject=async(req,res,next)=>{
         }
         let subject_image=subject.subjectImage;
         if(req.file){
+            require('../config/clearImage').clearImage(subject_image)
             subject_image=req.file.path;
         }
         subject.subjectImage=subject_image;
