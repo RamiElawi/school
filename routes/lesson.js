@@ -16,7 +16,7 @@ const upload=multer({storage:storageFile})
 
 route.post('/addLesson/:subjectId',isAuth,upload.single('file'),lessonController.addLesson)
 
-route.put('/updateLesson/:lessonId',isAuth,upload.single('file'),lessonController.updateLesson)
+route.put('/updateLesson/:lessonId',isAuth,upload.single('newFile'),lessonController.updateLesson)
 
 route.get('/allLesson',isAuth,lessonController.getLessons)
 

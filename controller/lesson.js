@@ -11,14 +11,13 @@ exports.addLesson=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        // console.log(req.file.originalname.split('.')[0]  ) 
-        const file=await db.file.create({fileableId:lesson.id
+        console.log(req.file)
+        const File=await db.file.create({fileableId:lesson.id
             ,fileableType:'Lesson'
             ,path:req.file.path,
             name:req.file.originalname.split('.')[0]
         })
-        // console.log(file,lesson)
-        return res.status(200).json({message:'create lesson is done',lesson:lesson,file:file})
+        return res.status(200).json({message:'create lesson is done',lesson:lesson,file:File})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500
@@ -30,9 +29,10 @@ exports.addLesson=async(req,res,next)=>{
 exports.updateLesson=async(req,res,next)=>{
     const name=req.body.name;
     const {lessonId}=req.params
-    // console.log(name,lessonId)
+    console.log("line 32",name,lessonId)
     try{
         const less=await db.lesson.findOne({where:{id:lessonId}})
+        console.log(less)
         if(!less){
             const error=new Error('this lesson is not found')
             error.stausCode=422;
@@ -42,18 +42,23 @@ exports.updateLesson=async(req,res,next)=>{
         less.name=name;
         // console.log(less.name)
         let lessonFile=await db.file.findOne({where:{fileableId:lessonId,fileableType:'Lesson'}})
-        console.log(lessonFile)
-        console.log(req.file)
-        if(!req.file){
+        // console.log("44",lessonFile)
+        // console.log("45",req.file)
+        if(req.file && lessonFile){
             console.log('threw is file')
             lessonFile.path=req.file.path;
             lessonFile.name=req.file.originalname.split('.')[0]
             await lessonFile.save()
+            await less.save()
+            return res.status(200).json({message:'lesson has been updated'})
         }
+        const newFile=await db.file.create({fileableId:less.id
+            ,fileableType:'Lesson'
+            ,path:req.file.path,
+            name:req.file.originalname.split('.')[0]
+        })               
         await less.save()
-        // return res.status(200).json({message:'done'})
-        return res.status(200).json({message:'lesson has been updated'})
-        // return res.status(200).json({message:'update is done', lesson:lesson,file:lessonFile})
+        return res.status(200).json({message:'lesson has been updated with newFile'})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500
