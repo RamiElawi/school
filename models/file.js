@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      file.belongsTo(models.User,{foreignKey:'fileabelId',constraints:false})
-      file.belongsTo(models.lesson,{foreignKey:'fileabelId',constraints:false})
+      // file.belongsTo(models.User,{foreignKey:'fileabelId',constraints:false})
+      // file.belongsTo(models.lesson,{foreignKey:'fileabelId',constraints:false})
     }
   }
   file.init({

@@ -22,4 +22,5 @@ router.get('/getProfile/:userId',isAuth,userController.getProfile);
 router.post('/addRate/:userId',isAuth,userController.addRate)
 
 router.get('/getRate/:userId',isAuth,userController.getRate)
+
 module.exports=router;
