@@ -25,7 +25,7 @@ exports.addSubject=async(req,res,next)=>{
 }
 
 exports.updateSubject=async(req,res,next)=>{
-    const {name,minimumSuccess}=req.body;
+    const {name,minimumSuccess,teacherId}=req.body;
     const subjectId=req.params.subjectId;
 
     try{
@@ -42,7 +42,8 @@ exports.updateSubject=async(req,res,next)=>{
         }
         subject.subjectImage=subject_image;
         subject.name=name;
-        subject.minimumSuccess=minimumSuccess
+        subject.minimumSuccess=minimumSuccess,
+        subject.teacherId=teacherId
         await subject.save();
         return res.status(200).json({message:'subject has been updated'})
     }catch(err){
@@ -76,7 +77,7 @@ exports.deleteSubject=async(req,res,next)=>{
 
 exports.getSubjects=async(req,res,next)=>{
     try{
-        const subjects=await db.subject.findAll();
+        const subjects=await db.subject.findAll({include:{ association: 'User'}});
         if(!subjects){
             subjects='there are no subjects'
         }
@@ -93,7 +94,7 @@ exports.getSubject=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
     console.log(subjectId)
 try{
-    const subject=await db.subject.findOne({where:{id:subjectId}});
+    const subject=await db.subject.findOne({where:{id:subjectId},include:{association:'User'}});
     if(!subject){
         const error=new Error('this subject is not found')
         error.statusCode=422;

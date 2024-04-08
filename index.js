@@ -33,10 +33,11 @@ app.use((err,req,res,next)=>{
 let onlineUsers=[];
 io.on('connection',socket=>{
     console.log('new connected',socket.id)
-    socket.on('addNewUser',(userId)=>{
-        onlineUsers.some((user)=> user.userId === userId)&&
+    socket.on('addNewUser',(user)=>{
+        console.log("userId",user.userId)
+        onlineUsers.some((u)=> u.userId === user.userId)||
         onlineUsers.push({
-            userId,
+            userId:user.userId,
             socketId:socket.id
         });
         console.log("onlineUsers",onlineUsers)
@@ -44,11 +45,28 @@ io.on('connection',socket=>{
     })
 
     socket.on("sendMessage",message=>{
+        console.log(message)
         const user=onlineUsers.find(user=>user.userId === message.recipientId)
+        console.log(user)
         if(user) io.to(user.socketId).emit("getMessage",message)
     })
+    // console.log(socket)
+    socket.on('enterRoom',data=>{
+        // console.log(data)
+        socket.join(data.room)
+        console.log(data.userId,"=",socket.rooms)
+    })
+    socket.on('sendMessageToRoom',messageData=>{
+        // console.log("this data is inside ",data)
+        console.log(messageData)
+        sendData={message:messageData.text,sender:messageData.userId}
+        io.to(messageData.room).emit('getMessageToRoom',sendData)
+    })
+    console.log(socket)
     socket.on('disconnect',()=>{
+        console.log(socket.id)
         onlineUsers=onlineUsers.filter((user)=>user.socketId !== socket.id);
+        console.log(onlineUsers)
         io.emit("getOnlineUsers",onlineUsers)
     })
 })

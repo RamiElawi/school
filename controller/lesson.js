@@ -7,8 +7,10 @@ exports.addLesson=async(req,res,next)=>{
     try{
         const lesson=await db.lesson.create({name:name,subjectId:subjectId})
         if(!req.file){
+            console.log("there is no file here")
             const error=new Error('there is no file')
             error.statusCode=422;
+            console.log(error)
             throw error;
         }
         console.log(req.file)
@@ -22,7 +24,7 @@ exports.addLesson=async(req,res,next)=>{
         if(!err.statusCode){
             err.statusCode=500
         }
-        next()
+        next(err)
     }
 }
 
@@ -63,7 +65,7 @@ exports.updateLesson=async(req,res,next)=>{
         if(!err.statusCode){
             err.statusCode=500
         }
-        next();
+        next(err);
     }
 }
 
