@@ -10,7 +10,8 @@ exports.createSingleChat=async(req,res,next)=>{
            return res.status(200).json({chat:chat}) 
         }
         const chat=await db.group.create({isGroup:false})
-        const users=await db.group_user.bulkCreate({groupId:chat.id,userId:senderId},{groupId:chat.id,userId:reciverId})
+        // const users=await db.group_user.bulkCreate({groupId:chat.id,userId:senderId},{groupId:chat.id,userId:reciverId})
+        // const user1=await db.group_user.create({groupId:chat.id,})
         return res.status(200).json({chat:chat,users:users})
     }catch(err){
         if(!err.statusCode){
@@ -21,14 +22,17 @@ exports.createSingleChat=async(req,res,next)=>{
 }
 
 exports.createGroup=async(req,res,next)=>{
-    const {groupName,groupImage}=req.body
+    const {groupName,users}=req.body
     try{
         if(!req.file){
             const error=new Error('there is no file')
             error.statusCode=422;
             throw error;
         }
-        const group=await db.group.create({groupName:groupName,groupImage:req.file.image})
+        const group=await db.group.create({groupName:groupName,groupImage:req.file.image,isGroup:true})
+        users.forEach(async element => {
+            await db.group_user.create({userId:element,groupId:group.id})
+        });
         return res.status(200).json({group:group})
     }catch(err){
         if(!err.statusCode){
@@ -45,6 +49,32 @@ exports.addUsers=async(req,res,next)=>{
         return res.status(200).json({message:'done'})
     }catch(err){
         if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}
+
+exports.sendMessage=async(req,res,next)=>{
+    const {message,senderId,groupId}=req.body;
+    try{
+        const newMessage=await db.message.create({text:message,groupId:groupId,userId:senderId,date:Date.now()})
+        return res.status(200).json({message:newMessage})
+    }catch(err){
+        if(err.satatusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}
+
+exports.getAllMessage=async(req,res,next)=>{
+    const {groupId}=req.body;
+    try{
+        const allMessage=await db.message.findAll({where:{groupId:groupId}})
+        return res.status(200).json({messages:allMessage})
+    }catch(err){
+        if(err.satatusCode){
             err.statusCode=500
         }
         next(err)

@@ -18,5 +18,5 @@ route.use('/question',question);
 route.use('/effectiveness',effectiveness)
 route.use('/request',request)
 route.use('/lesson',lessonRouter)
-// route.use('/chat',chatRouter)
+route.use('/chat',chatRouter)
 module.exports=route;

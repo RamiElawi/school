@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      group.belongsToMany(models.User,{through:models.group_user})
-      group.belongsToMany(models.User,{through:models.message})
+      // group.belongsToMany(models.User,{through:models.group_user})
+      // group.belongsToMany(models.User,{through:models.message})
     }
   }
   group.init({

@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       // User.belongsToMany(models.answers,{through:models.user_answer})
       User.hasMany(models.user_answer)
       User.hasOne(models.subject,{foreignKey:'teacherId'})
-      User.belongsToMany(models.group,{through:models.group_user})
-      User.belongsToMany(models.group,{through:models.message})
+      // User.belongsToMany(models.group,{through:models.group_user})
+      // User.belongsToMany(models.group,{through:models.message})
 
     }
   }

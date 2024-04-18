@@ -121,8 +121,9 @@ exports.getLesson=async(req,res,next)=>{
 }
 
 exports.getLessons=async(req,res,next)=>{
+    const {subjectId}=req.params 
     try{
-        const lessons=await db.lesson.findAll({include:[db.file]})
+        const lessons=await db.lesson.findAll({where:{subjectId:subjectId},include:[db.file]})
         if(!lessons) lessons='there are no lesson'
         return res.status(200).json({lessons:lessons})
     }catch(err){

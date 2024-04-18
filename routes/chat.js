@@ -17,7 +17,11 @@ router.post('/createSingleChat',chatController.createSingleChat)
 
 router.post('/createGroup',upload.single('image'),chatController.createGroup)
 
-router.post('/addUsers',chatController.addUsers)
+// router.post('/addUsers',chatController.addUsers)
+
+router.post('/sendMessage',chatController.sendMessage)
+
+router.post('/getAllMessage',chatController.getAllMessage)
 
 
 module.exports=router;

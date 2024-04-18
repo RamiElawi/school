@@ -35,12 +35,12 @@ exports.updateSubject=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        let subject_image=subject.subjectImage;
+        let subject_image=subject.image;
         if(req.file){
             require('../config/clearImage').clearImage(subject_image)
             subject_image=req.file.path;
         }
-        subject.subjectImage=subject_image;
+        subject.image=subject_image;
         subject.name=name;
         subject.minimumSuccess=minimumSuccess,
         subject.teacherId=teacherId

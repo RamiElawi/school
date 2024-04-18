@@ -53,6 +53,7 @@ io.on('connection',socket=>{
     // console.log(socket)
     socket.on('enterRoom',data=>{
         // console.log(data)
+        // console.log(socket.rooms)
         socket.join(data.room)
         console.log(data.userId,"=",socket.rooms)
     })
