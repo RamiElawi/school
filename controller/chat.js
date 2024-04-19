@@ -1,5 +1,5 @@
 const db=require('../models')
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 exports.createSingleChat=async(req,res,next)=>{
     const{senderId,reciverId}=req.body
@@ -30,14 +30,15 @@ exports.createSingleChat=async(req,res,next)=>{
 exports.createGroup=async(req,res,next)=>{
     const {groupName,users}=req.body
     try{
+        console.log(req.file)
         if(!req.file){
             const error=new Error('there is no file')
             error.statusCode=422;
             throw error;
         }
-        const group=await db.group.create({groupName:groupName,groupImage:req.file.image,isGroup:true})
+        const group=await db.group.create({groupName:groupName,groupImage:req.file.path,isGroup:true})
         users.forEach(async element => {
-            await db.group_user.create({userId:element,groupId:group.id})
+            await db.group_user.create({UserId:element,groupId:group.id})
         });
         return res.status(200).json({group:group})
     }catch(err){
@@ -64,7 +65,7 @@ exports.addUsers=async(req,res,next)=>{
 exports.sendMessage=async(req,res,next)=>{
     const {message,senderId,groupId}=req.body;
     try{
-        const newMessage=await db.message.create({text:message,groupId:groupId,userId:senderId,date:Date.now()})
+        const newMessage=await db.message.create({text:message,groupId:groupId,UserId:senderId,date:Date.now()})
         return res.status(200).json({message:newMessage})
     }catch(err){
         if(err.satatusCode){
@@ -77,10 +78,40 @@ exports.sendMessage=async(req,res,next)=>{
 exports.getAllMessage=async(req,res,next)=>{
     const {groupId}=req.body;
     try{
-        const allMessage=await db.message.findAll({where:{groupId:groupId}})
+        const allMessage=await db.message.findAll({where:{groupId:groupId},include:{model:db.User}})
         return res.status(200).json({messages:allMessage})
     }catch(err){
         if(err.satatusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}
+
+exports.getAllGroup=async(req,res,next)=>{
+    try{
+        const groups=await db.group.findAll({include:{model:db.User,through:{model:db.group_user}}})
+        return res.status(200).json({groups:groups})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}
+
+exports.getGroup=async(req,res,next)=>{
+    const {groupId}=req.params
+    try{
+        const group=await db.group.findOne({where:{id:groupId},include:[{model:db.User,through:{model:db.group_user}}]})
+        if(!group){
+            const error=new Error('this group is not found')
+            error.statusCode=422;
+            throw error
+        }
+        return res.status(200).json({group:group})
+    }catch(err){
+        if(!err.statusCode){
             err.statusCode=500
         }
         next(err)

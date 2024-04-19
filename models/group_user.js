@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // group_user.belongsTo(models.User)
-      // group_user.belongsTo(models.group)
+      group_user.belongsTo(models.User)
+      group_user.belongsTo(models.group)
     }
   }
   group_user.init({
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
       references:{
         model:'users',

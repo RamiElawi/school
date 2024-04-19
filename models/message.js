@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // message.belongsTo(models.User)
+      message.belongsTo(models.User)
       message.belongsTo(models.group)
     }
   }
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    userId: {
+    UserId: {
       type: DataTypes.INTEGER,
       references:{
         model:'users',
