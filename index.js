@@ -8,6 +8,7 @@ const cors=require('cors')
 const path=require('path')
 const io=require('socket.io')(Server)
 require('dotenv').config()
+const { Op } = require("sequelize");
 
 app.use(cors({
     origin:'*',
@@ -51,19 +52,28 @@ io.on('connection',socket=>{
         if(user) io.to(user.socketId).emit("getMessage",message)
     })
     // console.log(socket)
-    socket.on('enterRoom',data=>{
-        // console.log(data)
-        // console.log(socket.rooms)
-        socket.join(data.room)
-        console.log(data.userId,"=",socket.rooms)
+    socket.on('enterRoom',async data=>{
+        if(data.sender != null){
+            const one=`${data.sender}-${data.receiver}`
+            const two=`${data.receiver}-${data.sender}`
+            const chat= await db.group.findOne({where:{groupName:{[Op.or]:[one,two]}}})
+            // console.log(chat)
+            socket.join(chat.id)
+            console.log(data.sender,"=",socket.rooms)
+        }
+        if(data.chatId != null){
+            socket.join(data.chatId)
+            console.log(data.userId,"=",socket.rooms)
+        }
     })
+    
     socket.on('sendMessageToRoom',messageData=>{
         // console.log("this data is inside ",data)
         console.log(messageData)
         sendData={message:messageData.text,sender:messageData.userId}
         io.to(messageData.room).emit('getMessageToRoom',sendData)
     })
-    console.log(socket)
+    // console.log(socket)
     socket.on('disconnect',()=>{
         console.log(socket.id)
         onlineUsers=onlineUsers.filter((user)=>user.socketId !== socket.id);

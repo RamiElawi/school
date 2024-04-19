@@ -3,16 +3,22 @@ const { Op } = require("sequelize");
 
 exports.createSingleChat=async(req,res,next)=>{
     const{senderId,reciverId}=req.body
-    const chatId=req.body.chatId || null;
     try{
-        if(chatId != null){
-           const chat=await db.group.findOne({where:{id:chatId},include:[{model:db.group_user,inculde:{model:db.user}},{model:db.message}]})
-           return res.status(200).json({chat:chat}) 
+
+        const one=`${senderId}-${reciverId}`;
+        const two=`${reciverId}-${senderId}`
+        const isExist=await db.group.findOne({where:{
+            groupName:{[Op.or]:[one ,two]}
+        }})
+
+            // console.log(isExist)
+        if(isExist == null){
+           const chat=await db.group.create({groupName:one,isGroup:false})
+           const user1=await db.group_user.create({groupId:chat.id,userId:senderId})
+           const user2=await db.group_user.create({groupId:chat.id,userId:reciverId})
+            return res.status(200).json({chat:chat}) 
         }
-        const chat=await db.group.create({isGroup:false})
-        // const users=await db.group_user.bulkCreate({groupId:chat.id,userId:senderId},{groupId:chat.id,userId:reciverId})
-        // const user1=await db.group_user.create({groupId:chat.id,})
-        return res.status(200).json({chat:chat,users:users})
+        return res.status(200).json(isExist)
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500
