@@ -26,7 +26,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    userId:{
+    weight:{
+      type:DataTypes.DOUBLE
+    },
+    lenght:{
+      type:DataTypes.DOUBLE
+    },
+    UserId:{
       type:DataTypes.INTEGER,
       references:{
         model:"users",
@@ -34,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
-    },
+    }
   }, {
     sequelize,
     modelName: 'request',

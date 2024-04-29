@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Mark.belongsTo(models.User,{foreignKey:'studentId'})
+      Mark.belongsTo(models.User,{foreignKey:'studentId',inverse: {
+        as: 'studentId',
+      }})
       Mark.belongsTo(models.subject,{foreignKey:'subjectId'})
-      Mark.belongsTo(models.User,{foreignKey:'teacherId'})
+      Mark.belongsTo(models.User,{foreignKey:'teacherId',inverse: {
+        as: 'teacherId',
+      }})
     }
   }
   Mark.init({
@@ -46,7 +50,14 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate:'CASCADE'
     },
     year:{
-      type:DataTypes.DATE
+      type:DataTypes.STRING,
+      // get(){
+      //   const date= this.getDataValue('year');
+      //   return date?date.getFullYear():null;
+      // },
+      // set(value){
+      //   const year=par
+      // }
     },
     status:{
       type:DataTypes.ENUM("SUCCESSFUL", "FAILED")

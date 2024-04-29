@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.DOUBLE
       },
       year:{
-        type:Sequelize.DATE
+        type:Sequelize.STRING
       },
       status:{
         type:Sequelize.ENUM("SUCCESSFUL", "FAILED")

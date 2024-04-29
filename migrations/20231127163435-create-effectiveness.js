@@ -15,8 +15,11 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      allowedNumber: {
-        type: Sequelize.INTEGER
+      startDate:{
+        type:Sequelize.DATE
+      },
+      endDate:{
+        type:Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

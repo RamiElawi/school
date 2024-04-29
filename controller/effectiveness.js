@@ -1,14 +1,14 @@
 const db=require('../models')
 
 exports.addEffectiveness=async(req,res,next)=>{
-    const {title,description,allowedNumber}=req.body
+    const {title,description,startDate,endDate}=req.body
     try{
         if(allowedNumber <= 1){
             const error=new Error('this is illegeal')
             error.statusCode=422;
             throw error;
         }
-        await db.effectiveness.create({title,description,allowedNumber})
+        await db.effectiveness.create({title,description,startDate,endDate})
         return res.status(200).json({message:'done'})
     }catch(err){
         if(!err.statusCode){
@@ -52,7 +52,7 @@ exports.getEffectivenessId=async(req,res,next)=>{
 }
 
 exports.updateEffectiveness=async(req,res,next)=>{
-    const {title,description,allowedNumber}=req.body
+    const {title,description,startDate,endDate}=req.body
     const {effectivenessId}=req.params
     try{
         const effect=await db.effectiveness.findOne({id:effectivenessId})
@@ -63,7 +63,8 @@ exports.updateEffectiveness=async(req,res,next)=>{
         }
         effect.title=title;
         effect.description=description;
-        effect.allowedNumber=allowedNumber
+        effect.startDate=startDate
+        effect.endDate=endDate
         await effect.save()
         return res.status(200).json({message:"effect has been updated"})
     }catch(err){

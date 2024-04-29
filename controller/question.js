@@ -1,14 +1,15 @@
 const db=require('../models')
 
 exports.addQuestion=async (req,res,next)=>{
-    const {text,rightAnswer,answers}=req.body
+    const {text,rightAnswer,answers,mark}=req.body
     const {type,id}=req.params
     console.log(answers)
     try{
         const question=await db.question.create({
             title:text,
             questionableType:type,
-            questionableId:id
+            questionableId:id,
+            mark:mark
         })
          answers.forEach(async (answer)=>{
             await db.answer.create({
@@ -32,7 +33,7 @@ exports.addQuestion=async (req,res,next)=>{
 }
 
 exports.updateQuestion=async(req,res,next)=>{
-    const {text,rightAnswer,Answers}=req.body
+    const {text,rightAnswer,Answers,mark}=req.body
     const {questionId}=req.params
     try{
         const question=await db.question.findOne({id:questionId})
@@ -42,6 +43,7 @@ exports.updateQuestion=async(req,res,next)=>{
             throw error
         }
         question.text=text;
+        question.mark=makr;
         await question.save()
         const answers=await db.answer.findAll({where:{questionId:questionId}})
         if(!answers){
@@ -113,11 +115,11 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
     const {answers}=req.body;//[{question:1,answer:1},{question:2,answer:2}]
     const {id}=req.params;
     const subjectStatus='FAILED'
-    // const studentMark=0;
+    let studentMark=0.0;
     try{
         // const questionNumber=await db.question.count({where:{questionableId:id,questionableType:type}})
         // const halfQuestionNumber=Math.floor(questionNumber/2)
-        await answers.foreach(async (answer)=>{
+        await answers.forEach(async (answer)=>{
             const questionId=answer.question;
             const answerId=answer.answer
             const question=await db.question.findOne({where:{id:questionId}})
@@ -127,10 +129,10 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
                 throw error;
             }
             if(question.rightAnswer == answerId){
-                // studentMark+=question.mark
+                studentMark+=question.mark
             }
-            await db.answer.create({
-                userId:req.userId,
+            await db.user_answer.create({
+                UserId:req.userId,
                 answerId:answer.answer
             })
         })
@@ -138,14 +140,28 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
         if(studentMark>=subject.minimumSuccess){
             subjectStatus='SUCCESSFUL'
         }
-        await db.Mark.create({
-            studentId:req.userId,
-            mark:studentMark,
-            teacherId,
-            subjectId:id,
-            year,
-            status:subjectStatus
-        })
+        const mark=await db.Mark.findOne({where:{studentId:req.userId,subjectId:id}})
+        console.log(new Date().getFullYear())
+        const thisYear= parseInt(new Date().getFullYear())
+        const newYear=new Date(thisYear,0,1)
+
+        console.log(newYear)
+        if(!mark){
+            await db.Mark.create({
+                studentId:req.userId,
+                mark:studentMark,
+                teacherId:subject.teacherId,
+                subjectId:id,
+                year:`${thisYear}`,
+                status:subjectStatus
+            })
+            return res.status(200).json({message:'done'})
+        }
+        mark.mark=studentMark;
+        mark.status=subjectStatus;
+        mark.year=`${thisYear}`
+        console.log(mark.year)
+        await mark.save()
         return res.status(200).json({message:'done'})
     }catch(err){
         if(!err.statusCode){
@@ -155,9 +171,10 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
     }
 }
 
+
 exports.chooseLessonAnswer=async(req,res,next)=>{
     const {answer}=req.body//{question:1,answer:1}'
-    const status=false
+    let status=false
     try{    
         const question=await db.question.findOne({where:{id:answer.question}})
         if(!question){
@@ -168,11 +185,12 @@ exports.chooseLessonAnswer=async(req,res,next)=>{
         if(question.rightAnswer==answer.answer){
             status=true
         }
-        await db.answer.create({
-            userId:req.userId,
+        await db.user_answer.create({
+            UserId:req.userId,
             answerId:answer.answer
         })
-        return res.status(200).json({status:status,right:question.rightAnswer})
+        const rightAnswer=await db.answer.findOne({where:{id:question.rightAnswer}})
+        return res.status(200).json({status:status,rightAnswer:rightAnswer.answer})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500;

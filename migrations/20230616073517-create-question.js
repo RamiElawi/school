@@ -23,6 +23,9 @@ module.exports = {
         type:Sequelize.ENUM("Lesson","Subjects"),
         allowNull:false
       },
+      mark:{
+        type:Sequelize.DOUBLE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -15,14 +15,8 @@ module.exports = {
       path: {
         type: Sequelize.STRING
       },
-      subjectId:{
-        type:Sequelize.INTEGER,
-        references:{
-          model:'subjects',
-          key:'id'
-        },
-        onDelete:'CASCADE',
-        onUpdate:'CASCADE'
+      image:{
+        type:Sequelize.STRING
       },
       teacherId:{
         type:Sequelize.INTEGER,

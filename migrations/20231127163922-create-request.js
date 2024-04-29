@@ -30,6 +30,12 @@ module.exports = {
         onDelete:'CASCADE',
         onUpdate:'CASCADE'
       },
+      weight:{
+        type:Sequelize.DOUBLE
+      },
+      lenght:{
+        type:Sequelize.DOUBLE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

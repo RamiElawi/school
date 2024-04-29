@@ -10,7 +10,7 @@ exports.addSubject=async(req,res,next)=>{
         console.log(req.file)
         const subject=await db.subject.create({
             name:name,
-            image:req.file.image,
+            // image:req.file.image,
             minimumSuccess:minimumSuccess,
             teacherId:teacherId,
             image:req.file.path

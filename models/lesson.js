@@ -33,6 +33,15 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
+    sectionId:{
+      type:DataTypes.INTEGER,
+        references:{
+          model:'Sections',
+          key:'id'
+        },
+        onDelete:'CASCADE',
+        onUpdate:'CASCADE'
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE

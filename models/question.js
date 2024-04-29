@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: DataTypes.STRING,
     rightAnswer: DataTypes.INTEGER,
+    mark:DataTypes.DOUBLE,
     questionableId:{
       type:DataTypes.INTEGER,
       allowNull:false

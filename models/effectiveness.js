@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   effectiveness.init({
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    allowedNumber: DataTypes.INTEGER
+    startDate:DataTypes.DATE,
+    endDate:DataTypes.DATE
   }, {
     sequelize,
     modelName: 'effectiveness',

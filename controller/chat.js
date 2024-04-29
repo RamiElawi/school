@@ -28,7 +28,8 @@ exports.createSingleChat=async(req,res,next)=>{
 }
 
 exports.createGroup=async(req,res,next)=>{
-    const {groupName,users}=req.body
+    const {groupName}=req.body
+    const users=JSON.parse(req.body.users)
     try{
         console.log(req.file)
         if(!req.file){
@@ -90,7 +91,7 @@ exports.getAllMessage=async(req,res,next)=>{
 
 exports.getAllGroup=async(req,res,next)=>{
     try{
-        const groups=await db.group.findAll({include:{model:db.User,through:{model:db.group_user}}})
+        const groups=await db.group.findAll({where:{isGroup:true},include:{model:db.User,through:{model:db.group_user}}})
         return res.status(200).json({groups:groups})
     }catch(err){
         if(!err.statusCode){

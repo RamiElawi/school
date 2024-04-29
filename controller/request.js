@@ -2,10 +2,13 @@ const db=require('../models')
 
 exports.addRequest=async(req,res,next)=>{
     const {effectId}=req.params;
+    const {weight,length}=req.body
     try{
         await db.request.create({
             effectivenessId:effectId,
-            userId:req.userId
+            UserId:req.userId,
+            status:"unacceptable",
+            weight:weight,lenght:length
         })
         return res.status(200).json({message:'done'})
     }catch(err){

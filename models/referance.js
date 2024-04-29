@@ -27,15 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     path: {
       type: DataTypes.STRING
     },
-    subjectId:{
-      type:DataTypes.INTEGER,
-      references:{
-        model:'subjects',
-        key:'id'
-      },
-      onDelete:'CASCADE',
-      onUpdate:'CASCADE'
-    },
+    image:DataTypes.STRING,
     teacherId:{
       type:DataTypes.INTEGER,
       references:{
