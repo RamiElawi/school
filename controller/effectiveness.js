@@ -84,7 +84,7 @@ exports.deleteEffectiveness=async(req,res,next)=>{
             error.statusCode=422
             throw error
         }
-        await effect.destroyed()
+        await effect.destroy()
         return res.status(200).json({message:'effect has been deleted'})
     }catch(err){
         if(!err.statusCode){

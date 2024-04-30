@@ -43,7 +43,7 @@ exports.updateQuestion=async(req,res,next)=>{
             throw error
         }
         question.text=text;
-        question.mark=makr;
+        question.mark=mark;
         await question.save()
         const answers=await db.answer.findAll({where:{questionId:questionId}})
         if(!answers){

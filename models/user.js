@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.token)
-      // User.belongsTo(models.Section)
+      User.belongsTo(models.Section)
       User.belongsToMany(models.lesson,{through:models.attendance})
       User.belongsToMany(models.effectiveness,{through:models.request})
       User.hasMany(models.referance,{foreignKey:"teacherId"})
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.subject,{foreignKey:'teacherId'})
       User.belongsToMany(models.group,{through:models.group_user})
       User.belongsToMany(models.group,{through:models.message})
-
+      
     }
   }
   User.init({
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     },
-    sectionId:{
+    SectionId:{
       type:DataTypes.INTEGER,
       references:{
         model:'sections',
