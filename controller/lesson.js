@@ -133,3 +133,19 @@ exports.getLessons=async(req,res,next)=>{
         next(err)
     }
 }
+
+exports.allLessonToSection=async(req,res,next)=>{
+    const {sectionId,subjectId}=req.body
+    try{
+        const lessons=await db.lesson.findAll({where:{sectionId:sectionId,subjectId:subjectId}})
+        if(!lessons){
+            lessons='there are no lessons'
+        }
+        return res.status(200).json({lessons:lessons})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}

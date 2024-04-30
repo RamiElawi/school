@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      subject.belongsToMany(models.User,{through:models.referance})
       subject.belongsToMany(models.User,{through:models.Mark})
       subject.belongsToMany(models.Section,{through:models.schedules})
       subject.hasMany(models.question,{foreignKey:'questionableId',constraints:false,scope:{fileableType:'Subject'}})

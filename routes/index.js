@@ -9,6 +9,10 @@ const effectiveness=require('./effectiveness');
 const request= require('./request');
 const chatRouter=require('./chat')
 const lessonRouter=require('./lesson')
+const classRouter=require('./class')
+const sectionRouter=require('./section')
+
+
 
 route.use('/auth',authRouter);
 route.use('/user',userRouter);
@@ -19,4 +23,7 @@ route.use('/effectiveness',effectiveness)
 route.use('/request',request)
 route.use('/lesson',lessonRouter)
 route.use('/chat',chatRouter)
+route.use('/class',classRouter)
+route.use('/section',sectionRouter)
+
 module.exports=route;

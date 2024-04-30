@@ -111,20 +111,21 @@ try{
 }
 
 exports.addReferance=async(req,res,next)=>{
-    const {description,name}=req.body;
+    const {description,name,type}=req.body;
     const subjectId=req.params.subjectId;
 
     try{
-        
-        if(!req.files.file){
+        console.log(req.files)
+        if(!req.files.file || !req.files.image){
             const error=new Error('you dont choose file')
             error.statusCode=422;
             throw error;
         }
         await db.referance.create({
             description:description,
-            subjectId:subjectId,
+            type:type,
             path:req.files.file[0].path,
+            image:req.files.image[0].path,
             name:name,
             teacherId:req.userId
         })
@@ -139,17 +140,10 @@ exports.addReferance=async(req,res,next)=>{
 }
 
 exports.updateReferance=async(req,res,next)=>{
-    const {description,name}=req.body;
-    const subjectId=req.params.subjectId
+    const {description,name,type}=req.body;
     const referanceId=req.params.referanceId
-    let file;
+    let file,image;
     try{
-        const subject=await db.subject.findOne({where:{id:subject}})
-        if(!subject){
-            const error=new Error('this subject is not found')
-            error.statusCode=422;
-            throw error;
-        }
         const referance=await db.referance.findOne({where:{id:referanceId}})
         if(!referance){
             const error=new Error('this referance is not found')
@@ -160,10 +154,14 @@ exports.updateReferance=async(req,res,next)=>{
         if(req.files.file){
             file=req.files.file[0].path;
         }
+        if(req.files.image){
+            image=req.files.image[0].path
+        }
         referance.path=file;
         referance.description=description;
         referance.name=name;
-        referance.subjectId=subjectId
+        referance.type=type;
+        referance.image=image
         await referance.save();
         return res.status(200).json({message:'referance has been updated'})
     }catch(err){
@@ -193,9 +191,9 @@ exports.deleteReferance=async(req,res,next)=>{
 }
 
 exports.getReferance=async(req,res,next)=>{
-    const subjectId=req.parms.subjectId;
+    
     try{
-        const referances=await db.referance.findAll({where:{subjectId:subjectId}})
+        const referances=await db.referance.findAll()
         if(!referances){
             const error=new Error('there are no referances')
             error.statusCode=422;
@@ -207,5 +205,21 @@ exports.getReferance=async(req,res,next)=>{
             err.statusCode=500;
         }
         next(err);    
+    }
+}
+
+exports.filterReferance=async(req,res,next)=>{
+    const type=req.params.type
+    try{
+        const referance=await db.referance.findAll({where:{type:type}})
+        if(!referance){
+            referance='there are no referance in this type'
+        }
+        return res.status(200).json({referance:referance})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
     }
 }

@@ -24,7 +24,7 @@ route.get('/:lessonId',isAuth,lessonController.getLesson)
 
 route.delete('/deleteLesson/:lessonId',isAuth,lessonController.deleteLesson)
 
-
+route.get('/section/allLessonToSection',isAuth,lessonController.allLessonToSection)
 
 
 module.exports=route;

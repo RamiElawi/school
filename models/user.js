@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // User.belongsTo(models.Section)
       User.belongsToMany(models.lesson,{through:models.attendance})
       User.belongsToMany(models.effectiveness,{through:models.request})
-      User.belongsToMany(models.subject,{through:models.referance})
+      User.hasMany(models.referance,{foreignKey:"teacherId"})
       User.belongsToMany(models.subject,{through:models.Mark,foreignKey:"studentId"})
       User.hasMany(models.Mark,{foreignKey:"teacherId"})
       User.hasMany(models.rate,{foreignKey:'userId1'})

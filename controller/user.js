@@ -11,11 +11,31 @@ exports.addRate=async(req,res,next)=>{
                 userId1:req.userId,
                 userId2:userId
             })
-            return res.status(200).json({message:'done',rate:rate})
+            const newRate=await db.rate.sum('rate',{where:{userId2:userId}})
+            const count=await db.rate.count({where:{userId2:userId}})
+            const user=await db.User.findOne({where:{id:userId}})
+            if(!user){
+                const error=new Error('this user is not found')
+                error.statusCode=422;
+                throw error;  
+            }
+            user.rate=newRate/count;
+            await user.save();
+            return res.status(200).json({message:'done',rate:rate,allRate:newRate/count})
         }
         rateUser.rate=rate;
-        await user.save()
-        return res.status(200).json({message:'done',rate:rate})
+        await rateUser.save()
+        const newRate=await db.rate.sum('rate',{where:{userId2:userId}})
+        const count=await db.rate.count({where:{userId2:userId}})
+        const user=await db.User.findOne({where:{id:userId}})
+        if(!user){
+            const error=new Error('this user is not found')
+            error.statusCode=422;
+            throw error;  
+        }
+        user.rate=newRate/count;
+        await user.save();
+        return res.status(200).json({message:'done',rate:rate,allRate:newRate/count})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500
@@ -79,7 +99,7 @@ exports.changeImage=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        const userImage=req.file.userImage
+        const userImage=req.file.path
         const user=await db.User.findne({where:{id:userId}})
         if(!user){
             const error=new Error('this user is not found')

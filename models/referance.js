@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     image:DataTypes.STRING,
+    type:{type:DataTypes.STRING},
     teacherId:{
       type:DataTypes.INTEGER,
       references:{

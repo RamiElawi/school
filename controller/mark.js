@@ -53,7 +53,7 @@ exports.updateMark=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        const studentMark=await db.mark.findOne({studentId:studentId,subjectId:subjectId})
+        const studentMark=await db.Mark.findOne({studentId:studentId,subjectId:subjectId})
         if(!studentMark){
             const error=new Error('this student is not found')
             error.statusCode=422;
@@ -78,13 +78,13 @@ exports.updateMark=async(req,res,next)=>{
 exports.deleteMark=async(req,res,next)=>{
     const {studentId,subjectId}=req.body
     try{
-        const student=await db.user.findOne({where:{studentId:studentId}})
+        const student=await db.User.findOne({where:{studentId:studentId}})
         if(!student){
             const error=new Error('this student is not found')
             error.statusCode=422;
             throw error;
         }
-        const studentMark=await db.mark.findOne({studentId:studentId,subjectId:subjectId})
+        const studentMark=await db.Mark.findOne({studentId:studentId,subjectId:subjectId})
         if(!studentMark){
             const error=new Error('this student is not found')
             error.statusCode=422;
@@ -104,7 +104,7 @@ exports.getSubjectMarks=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
     const year=req.body.year;
     try{
-        const marks=await db.mark.findAll({where:{subjectId:subjectId,year:year},include:{model:db.User}})
+        const marks=await db.Mark.findAll({where:{subjectId:subjectId,year:year},include:{model:db.User}})
         return res.status(200).json({marks:marks})
     }catch(err){
         if(!err.statusCode){
@@ -115,10 +115,10 @@ exports.getSubjectMarks=async(req,res,next)=>{
 }
 // i should now in any way i should get it 
 exports.getStudentMark=async(req,res,next)=>{
-    const {studentId,subjectId}=req.body;
+    const {studentNumber,subjectId,year}=req.body;
     try{
-        const student=await db.user.findOne({where:{studentId:studentId}})
-        const mark=await db.mark.findOne({where:{studentId:student.studentId,subjectId:subjectId}})
+        const student=await db.User.findOne({where:{studentNumber:studentNumber}})
+        const mark=await db.Mark.findOne({where:{studentId:student.id,subjectId:subjectId,year:year}})
 
         return res.status(200).json({mark:mark})
     }catch(err){
@@ -127,15 +127,39 @@ exports.getStudentMark=async(req,res,next)=>{
 }
 // also
 exports.getStudentMarks=async(req,res,next)=>{
-    const {studentId}=req.body;
+    const {studetnNumber,year}=req.body;
     try{
-        const student=await db.user.findOne({where:{studentId:studentId}})
-        const marks=await db.mark.findOne({where:{studnetId:student.studentId}})
+        const student=await db.User.findOne({where:{studentNumber:studetnNumber,year:year}})
+        if(!student){
+            const error=new Error('not found student')
+            error.statusCode=404;
+            throw error;
+        }
+        const marks=await db.Mark.findAll({where:{studnetId:student.id}})
         return res.status(200).json({marks:marks})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500;
         }
         next(err);
+    }
+}
+
+exports.getStudentMakrsByName=async(req,res,next)=>{
+    const {firstName,lastName,middelName,year}=req.body
+    try{   
+        const student=await db.User.findOne({where:{firstName:firstName,lastName:lastName,middelName:middelName}})
+        if(!student){
+            const error=new Error('not found student')
+            error.statusCode=404;
+            throw error;
+        }
+        const marks=await db.Mark.findAll({where:{studentId:student.id,year:year}})
+        return res.status(200).json({marks:marks})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
     }
 }

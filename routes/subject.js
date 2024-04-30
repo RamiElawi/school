@@ -25,14 +25,15 @@ router.get('/getAllSubject',subjectController.getSubjects)
 
 router.get('/getSubject/:subjectId',subjectController.getSubject)
 
-router.post('/:subjectId/addRreferance',isAuth,upload.fields([{name:'file'}]),subjectController.addReferance)
+router.post('/addRreferance',isAuth,upload.fields([{name:'file'},{name:'image'}]),subjectController.addReferance)
 
-router.put('/:subjectId/updateRreferance/:referanceId',isAuth,upload.single('file'),subjectController.updateReferance)
+router.put('/updateRreferance/:referanceId',isAuth,upload.fields([{name:'file'},{name:'image'}]),subjectController.updateReferance)
 
-router.delete('/:subjectId/deleteReferance/:referanceId',isAuth,subjectController.deleteReferance)
+router.delete('/deleteReferance/:referanceId',isAuth,subjectController.deleteReferance)
 
-router.get('/:subjectId/getReferance',isAuth,subjectController.getReferance)
+router.get('/getReferance',isAuth,subjectController.getReferance)
 
+router.get('/filterReferance/:type',isAuth,subjectController.filterReferance)
 
 // add another way to get a referance
 
