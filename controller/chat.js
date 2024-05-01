@@ -18,7 +18,7 @@ exports.createSingleChat=async(req,res,next)=>{
            const user2=await db.group_user.create({groupId:chat.id,userId:reciverId})
             return res.status(200).json({chat:chat}) 
         }
-        return res.status(200).json(isExist)
+        return res.status(200).json({chat:isExist})
     }catch(err){
         if(!err.statusCode){
             err.statusCode=500

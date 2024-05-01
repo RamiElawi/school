@@ -71,7 +71,8 @@ io.on('connection',socket=>{
         // console.log("this data is inside ",data)
         console.log(messageData)
         sendData={message:messageData.text,sender:messageData.userId}
-        io.to(messageData.room).emit('getMessageToRoom',sendData)
+        let room=parseInt(messageData.room)
+        io.to(room).emit('getMessageToRoom',sendData)
     })
     // console.log(socket)
     socket.on('disconnect',()=>{

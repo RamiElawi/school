@@ -25,7 +25,7 @@ router.get('/getGroup/:groupId',chatController.getGroup)
 
 router.post('/sendMessage',chatController.sendMessage)
 
-router.get('/getAllMessage',chatController.getAllMessage)
+router.post('/getAllMessage',chatController.getAllMessage)
 
 
 module.exports=router;
