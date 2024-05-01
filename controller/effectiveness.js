@@ -3,8 +3,8 @@ const db=require('../models')
 exports.addEffectiveness=async(req,res,next)=>{
     const {title,description,startDate,endDate}=req.body
     try{
-        if(allowedNumber <= 1){
-            const error=new Error('this is illegeal')
+        if(endDate<=startDate){
+            const error=new Error('this is wrroing')
             error.statusCode=422;
             throw error;
         }
@@ -36,7 +36,7 @@ exports.getEffectiveness=async(req,res,next)=>{
 exports.getEffectivenessId=async(req,res,next)=>{
     const {effectId}=req.params
    try{
-       const effect=await db.effectiveness.findOne({id:effectId})
+       const effect=await db.effectiveness.findOne({where:{id:effectId}})
        if(!effect){
            const error=new Error('this effectiveness is not found')
            error.status=422;
@@ -55,11 +55,16 @@ exports.updateEffectiveness=async(req,res,next)=>{
     const {title,description,startDate,endDate}=req.body
     const {effectivenessId}=req.params
     try{
-        const effect=await db.effectiveness.findOne({id:effectivenessId})
+        const effect=await db.effectiveness.findOne({where:{id:effectivenessId}})
         if(!effect){
             const error=new Error('this effect is not found')
             error.statusCode=422
             throw error
+        }
+        if(endDate<=startDate){
+            const error=new Error('this is wrroing')
+            error.statusCode=422;
+            throw error;
         }
         effect.title=title;
         effect.description=description;
@@ -78,7 +83,7 @@ exports.updateEffectiveness=async(req,res,next)=>{
 exports.deleteEffectiveness=async(req,res,next)=>{
     const {effectivenessId}=req.params
     try{
-        const effect=await db.effectiveness.findOne({id:effectivenessId})
+        const effect=await db.effectiveness.findOne({where:{id:effectivenessId}})
         if(!effect){
             const error=new Error('this effect is not found')
             error.statusCode=422

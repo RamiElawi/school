@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class subject_section extends Model {
+  class schedule extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,19 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      subject_section.belongsTo(models.Section)
-      subject_section.belongsTo(models.subject)
-      subject_section.belongsTo(models.User,{foreignKey:'teacherId'})
+      schedule.belongsTo(models.Section)
+      schedule.belongsTo(models.subject)
+      schedule.belongsTo(models.User,{foreignKey:'teacherId'})
     }
   }
-  subject_section.init({
+  schedule.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    hour:DataTypes.DATE,
+    hour:DataTypes.TIME,
     day:DataTypes.ENUM("SAT","SUN","MON","TUS","WEN","THS"),
     date:DataTypes.DATE,
     subjectId:{
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    sectionId:{
+    SectionId:{
       type:DataTypes.INTEGER,
       references:{
         model:'sections',
@@ -64,5 +64,5 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'schedules',
   });
-  return subject_section;
+  return schedule;
 };

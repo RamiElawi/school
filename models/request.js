@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   request.init({
+    id:{
+      allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+    },
     status: {
       type: DataTypes.ENUM('acceptable','unacceptable')
     },

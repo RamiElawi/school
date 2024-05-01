@@ -4,10 +4,15 @@ exports.addRequest=async(req,res,next)=>{
     const {effectId}=req.params;
     const {weight,length}=req.body
     try{
+        const oldRequest=await db.request.findOne({where:{effectivenessId:effectId,UserId:req.userId}})
+        if(oldRequest){
+            const error=new Error('you are already add requset')
+            error.statusCode=422;
+            throw error;
+        }
         await db.request.create({
             effectivenessId:effectId,
             UserId:req.userId,
-            status:"unacceptable",
             weight:weight,lenght:length
         })
         return res.status(200).json({message:'done'})
