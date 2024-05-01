@@ -4,14 +4,14 @@ const db=require('../models')
 exports.addSection=async(req,res,next)=>{
     const {classId,maxNumberOfStudent,sectionNumber}=req.body;
     try{
-        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,classId:classId}})
+        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,ClassId:classId}})
         if(isExits){
             const error=new Error('this section is already exits')
             error.statusCode=422;
             throw error;
         }
         const section=await db.Section.create({
-            classId,maxNumberOfStudent,sectionNumber
+            Classd:classId,maxNumberOfStudent,sectionNumber
         })
         return res.status(200).json({message:'create section is done',section:section})
     }catch(err){
@@ -32,13 +32,13 @@ exports.updateSection=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,classId:classId}})
+        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,ClassId:classId}})
         if(isExits){
             const error=new Error('this section is already exits')
             error.statusCode=422;
             throw error;
         }
-        section.classId=classId;
+        section.ClassId=classId;
         section.maxNumberOfStudent=maxNumberOfStudent;
         section.sectionNumber=sectionNumber;
         await section.save();
@@ -73,7 +73,7 @@ exports.deleteSection=async(req,res,next)=>{
 exports.getAllSection=async(req,res,next)=>{
     const classId=req.body.classId
     try{
-        const sections=await db.Section.findAll({where:{classId:classId}})
+        const sections=await db.Section.findAll({where:{ClassId:classId}})
         if(!sections){
             sections='there are no sections'
         }
@@ -95,9 +95,9 @@ exports.addStudentToSection=async(req,res,next)=>{
             error.statusCode=404;
             throw error
         }
-        user.sectionId=sectionId
+        user.SectionId=sectionId
         await user.save()
-        const section=await db.section.findOne({where:{id:sectionId}})
+        const section=await db.Section.findOne({where:{id:sectionId}})
         return res.status(200).json({message:`student ${user.firstName} ${user.lastName} added to:${section.sectionNumber}`})
     }catch(err){
         if(!err.statusCode){
@@ -116,9 +116,9 @@ exports.updateSectionStudent=async(req,res,next)=>{
             error.statusCode=404;
             throw error
         }
-        user.sectionId=sectionId
+        user.SectionId=sectionId
         await user.save()
-        const section=await db.section.findOne({where:{id:sectionId}})
+        const section=await db.Section.findOne({where:{id:sectionId}})
         return res.status(200).json({message:`student ${user.firstName} ${user.lastName} added to:${section.sectionNumber}`})
     }catch(err){
         if(!err.statusCode){
@@ -137,7 +137,7 @@ exports.deleteStudentFromSection=async(req,res,next)=>{
             error.statusCode=404;
             throw error
         }
-        user.sectionId=null;
+        user.SectionId=null;
         await user.save()
         return res.status(200).json({message:"done"})
     }catch(err){
@@ -151,7 +151,7 @@ exports.deleteStudentFromSection=async(req,res,next)=>{
 exports.getStudentSection=async(req,res,next)=>{
     const {sectionId}=req.params;
     try{
-        const users=await db.User.findAll({where:{sectionId:sectionId}})
+        const users=await db.User.findAll({where:{SectionId:sectionId}})
         if(!users){
             users='there are no users in this section'
         }
