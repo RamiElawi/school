@@ -7,7 +7,7 @@ route.post('/addSection',isAuth,sectionController.addSection)
 
 route.put('/updateSection/:sectionId',isAuth,sectionController.updateSection)
 
-route.get('/allSections',isAuth,sectionController.getAllSection)
+route.post('/allSections',isAuth,sectionController.getAllSection)
 
 route.get('/addStudentToSection',isAuth,sectionController.addStudentToSection)
 

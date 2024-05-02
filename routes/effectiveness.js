@@ -4,9 +4,9 @@ const isAuth=require('../config/isAuth')
 
 router.post('/addEffectiveness',isAuth,effectivenessController.addEffectiveness)
 
-router.get('/getEffectiveness/:effectId',isAuth,effectivenessController.getEffectiveness)
+router.get('/getEffectiveness/:effectId',isAuth,effectivenessController.getEffectivenessId)
 
-router.get('/allEffectiveness',isAuth,effectivenessController.getEffectivenessId)
+router.get('/allEffectiveness',isAuth,effectivenessController.getEffectiveness)
 
 router.put('/updateEffectiveness/:effectivenessId',isAuth,effectivenessController.updateEffectiveness)
 

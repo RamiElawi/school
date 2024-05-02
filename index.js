@@ -6,7 +6,11 @@ const db=require('./models')
 const allRoutes=require('./routes')
 const cors=require('cors')
 const path=require('path')
-const io=require('socket.io')(Server)
+const io=require('socket.io')(Server,{
+    cors:{
+        origin:'*'
+    }
+})
 require('dotenv').config()
 const { Op } = require("sequelize");
 

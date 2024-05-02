@@ -84,7 +84,7 @@ exports.getRequest=async(req,res,next)=>{
 exports.getAllRequest=async(req,res,next)=>{
     const {effectId}=req.params
     try{
-        const requests=await db.request.findOne({where:{effectivenessId:effectId},include:{model:db.User,include:{model:db.Section,include:{model:db.Class}}}})
+        const requests=await db.request.findAll({where:{effectivenessId:effectId},include:{model:db.User,include:{model:db.Section,include:{model:db.Class}}}})
         if(!requests){
             const error=new Error("there are no request")
             error.statusCode=422;
@@ -120,7 +120,7 @@ exports.getAcceptRequest=async(req,res,next)=>{
     const {effectId}=req.params
     try{
         const requests=await db.request.findAll({where:{status:'acceptable',effectivenessId:effectId},include:{model:db.User,include:{model:db.Section,include:{model:db.Class}}}})
-        if(!request){
+        if(!requests){
             const error=new Error("there are no requests")
             error.statusCode=422;
             throw error;

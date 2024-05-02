@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    sectionNumber: DataTypes.INTEGER,
+    sectionNumber: DataTypes.STRING,
     maxNumberOfStudent:DataTypes.INTEGER,
     ClassId:{
       type:DataTypes.INTEGER,
