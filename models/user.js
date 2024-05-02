@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       // User.hasMany(models.chat,{foreignKey:'reciverId'})
       User.hasMany(models.father,{foreignKey:'fatherId'})
       User.hasMany(models.father,{foreignKey:'studentId'})
-      User.hasMany(models.schedules,{foreignKey:'teacherId'})
+      // User.hasMany(models.schedules,{foreignKey:'teacherId'})
       // User.belongsToMany(models.answers,{through:models.user_answer})
       User.hasMany(models.user_answer)
       User.hasOne(models.subject,{foreignKey:'teacherId'})

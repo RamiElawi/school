@@ -18,7 +18,7 @@ route.post('/addLesson/:subjectId',isAuth,upload.single('file'),lessonController
 
 route.put('/updateLesson/:lessonId',isAuth,upload.single('newFile'),lessonController.updateLesson)
 
-route.get('/allLesson/:subjectId',isAuth,lessonController.getLessons)
+route.get('/allLesson/:subjectId/:sectionId',isAuth,lessonController.getLessons)
 
 route.get('/:lessonId',isAuth,lessonController.getLesson)
 

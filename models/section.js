@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Section.belongsTo(models.Class)
       Section.belongsToMany(models.subject,{through:models.schedules})
       Section.hasMany(models.User)
+      Section.hasMany(models.lesson)
     }
   }
   Section.init({

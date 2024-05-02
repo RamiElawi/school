@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       lesson.belongsToMany(models.User,{through:models.attendance})
       lesson.hasMany(models.file,{foreignKey:'fileableId',constraints:false,scope:{fileableType:'Lesson'}})
       lesson.hasMany(models.question,{foreignKey:'questionableId',constraints:false,scope:{fileableType:'Lesson'}})
+      lesson.belongsTo(models.Section)
     }
   }
   lesson.init({
@@ -33,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    sectionId:{
+    SectionId:{
       type:DataTypes.INTEGER,
         references:{
           model:'Sections',

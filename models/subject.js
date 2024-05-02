@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       subject.belongsToMany(models.Section,{through:models.schedules})
       subject.hasMany(models.question,{foreignKey:'questionableId',constraints:false,scope:{fileableType:'Subject'}})
       subject.belongsTo(models.User,{foreignKey:"teacherId"})
+      subject.belongsTo(models.Class)
     }
   }
   subject.init({
@@ -34,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.INTEGER,
       references:{
         model:'users',
+        key:'id'
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE'
+    },
+    ClassId:{
+      type:DataTypes.INTEGER,
+      references:{
+        model:'classes',
         key:'id'
       },
       onDelete:'CASCADE',
