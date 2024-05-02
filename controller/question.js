@@ -1,3 +1,4 @@
+const { where } = require('sequelize')
 const db=require('../models')
 
 exports.addQuestion=async (req,res,next)=>{
@@ -36,13 +37,13 @@ exports.updateQuestion=async(req,res,next)=>{
     const {text,rightAnswer,Answers,mark}=req.body
     const {questionId}=req.params
     try{
-        const question=await db.question.findOne({id:questionId})
+        const question=await db.question.findOne({where:{id:questionId}})
         if(!question){
             const error=new Error('this question is not exsits')
             error.statusCode=422;
             throw error
         }
-        question.text=text;
+        question.title=text;
         question.mark=mark;
         await question.save()
         const answers=await db.answer.findAll({where:{questionId:questionId}})
@@ -160,6 +161,7 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
         mark.mark=studentMark;
         mark.status=subjectStatus;
         mark.year=`${thisYear}`
+        mark.teacherId=subject.teacherId
         console.log(mark.year)
         await mark.save()
         return res.status(200).json({message:'done'})

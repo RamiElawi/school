@@ -37,7 +37,8 @@ exports.addMark=async(req,res,next)=>{
 }
 
 exports.updateMark=async(req,res,next)=>{
-    const {mark,studentId,subjectId}=req.body
+    const {mark,subjectId}=req.body
+    const {studentId}=req.params
     let status='FAILED';
     try{
 
@@ -47,7 +48,7 @@ exports.updateMark=async(req,res,next)=>{
             throw error;
         }
 
-        const student=await db.user.findOne({where:{studentId:studentId}})
+        const student=await db.User.findOne({where:{id:studentId}})
         if(!student){
             const error=new Error('this student is not found')
             error.statusCode=422;
@@ -76,7 +77,8 @@ exports.updateMark=async(req,res,next)=>{
 }
 
 exports.deleteMark=async(req,res,next)=>{
-    const {studentId,subjectId}=req.body
+    const {subjectId}=req.body
+    const {studentId}=req.params
     try{
         const student=await db.User.findOne({where:{studentId:studentId}})
         if(!student){
@@ -129,13 +131,13 @@ exports.getStudentMark=async(req,res,next)=>{
 exports.getStudentMarks=async(req,res,next)=>{
     const {studetnNumber,year}=req.body;
     try{
-        const student=await db.User.findOne({where:{studentNumber:studetnNumber,year:year}})
+        const student=await db.User.findOne({where:{studentNumber:studetnNumber}})
         if(!student){
             const error=new Error('not found student')
             error.statusCode=404;
             throw error;
         }
-        const marks=await db.Mark.findAll({where:{studnetId:student.id}})
+        const marks=await db.Mark.findAll({where:{studentId:student.id,year:year}})
         return res.status(200).json({marks:marks})
     }catch(err){
         if(!err.statusCode){
@@ -148,7 +150,7 @@ exports.getStudentMarks=async(req,res,next)=>{
 exports.getStudentMakrsByName=async(req,res,next)=>{
     const {firstName,lastName,middelName,year}=req.body
     try{   
-        const student=await db.User.findOne({where:{firstName:firstName,lastName:lastName,middelName:middelName}})
+        const student=await db.User.findOne({where:{firstName:firstName,lastName:lastName,midelName:middelName}})
         if(!student){
             const error=new Error('not found student')
             error.statusCode=404;

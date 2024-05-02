@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     sectionNumber: DataTypes.STRING,
     maxNumberOfStudent:DataTypes.INTEGER,
-    ClassId:{
+    classId:{
       type:DataTypes.INTEGER,
       references:{
         model:'classes',

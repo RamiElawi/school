@@ -5,7 +5,7 @@ exports.addLesson=async(req,res,next)=>{
     const {name,sectionId}=req.body
     const {subjectId}=req.params
     try{
-        const lesson=await db.lesson.create({name:name,subjectId:subjectId,sectionId:sectionId})
+        const lesson=await db.lesson.create({name:name,subjectId:subjectId,SectionId:sectionId})
         if(!req.file){
             console.log("there is no file here")
             const error=new Error('there is no file')
@@ -43,7 +43,7 @@ exports.updateLesson=async(req,res,next)=>{
         }
         // console.log(less.name)
         less.name=name;
-        less.sectionId=sectionId
+        less.SectionId=sectionId
         // console.log(less.name)
         let lessonFile=await db.file.findOne({where:{fileableId:lessonId,fileableType:'Lesson'}})
         // console.log("44",lessonFile)

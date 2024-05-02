@@ -4,14 +4,14 @@ const db=require('../models')
 exports.addSection=async(req,res,next)=>{
     const {classId,maxNumberOfStudent,sectionNumber}=req.body;
     try{
-        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,ClassId:classId}})
+        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,classId:classId}})
         if(isExits){
             const error=new Error('this section is already exits')
             error.statusCode=422;
             throw error;
         }
         const section=await db.Section.create({
-            Classd:classId,maxNumberOfStudent,sectionNumber
+            classd:classId,maxNumberOfStudent,sectionNumber
         })
         return res.status(200).json({message:'create section is done',section:section})
     }catch(err){
@@ -32,13 +32,13 @@ exports.updateSection=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,ClassId:classId}})
+        const isExits=await db.Section.findOne({where:{sectionNumber:sectionNumber,classId:classId}})
         if(isExits){
             const error=new Error('this section is already exits')
             error.statusCode=422;
             throw error;
         }
-        section.ClassId=classId;
+        section.classId=classId;
         section.maxNumberOfStudent=maxNumberOfStudent;
         section.sectionNumber=sectionNumber;
         await section.save();
@@ -55,7 +55,7 @@ exports.deleteSection=async(req,res,next)=>{
     const {sectionId}=req.params
     try{
         const section=await db.Section.findOne({where:{id:sectionId}})
-        if(isExits){
+        if(!section){
             const error=new Error('this section is not found')
             error.statusCode=404;
             throw error
@@ -73,7 +73,7 @@ exports.deleteSection=async(req,res,next)=>{
 exports.getAllSection=async(req,res,next)=>{
     const classId=req.body.classId
     try{
-        const sections=await db.Section.findAll({where:{ClassId:classId}})
+        const sections=await db.Section.findAll({where:{classId:classId}})
         if(!sections){
             sections='there are no sections'
         }
