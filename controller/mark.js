@@ -64,8 +64,10 @@ exports.updateMark=async(req,res,next)=>{
         if(mark>=subject.minimum_success){
             status='SUCCESSFUL'
         }
+        const teacher=await db.User.findOne({where:{id:req.userId}})
         studentMark.mark=mark;
         studentMark.status=status
+        studentMark.teacherName=`${teacher.firstName} ${teacher.midelName} ${teacher.lastName}`
         await studentMark.save()
         return res.status(200).json({message:'done'})
     }catch(err){
