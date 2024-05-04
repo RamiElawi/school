@@ -106,7 +106,7 @@ exports.getSubjectMarks=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
     const year=req.body.year;
     try{
-        const marks=await db.Mark.findAll({where:{subjectId:subjectId,year:year},include:{model:db.User}})
+        const marks=await db.Mark.findAll({where:{subjectId:subjectId,year:year},include:[{model:db.User},{model:db.subject}]})
         return res.status(200).json({marks:marks})
     }catch(err){
         if(!err.statusCode){
@@ -120,7 +120,7 @@ exports.getStudentMark=async(req,res,next)=>{
     const {studentNumber,subjectId,year}=req.body;
     try{
         const student=await db.User.findOne({where:{studentNumber:studentNumber}})
-        const mark=await db.Mark.findOne({where:{studentId:student.id,subjectId:subjectId,year:year}})
+        const mark=await db.Mark.findOne({where:{studentId:student.id,subjectId:subjectId,year:year},include:[{model:db.User},{mdoel:db.subject}]})
 
         return res.status(200).json({mark:mark})
     }catch(err){
@@ -137,7 +137,7 @@ exports.getStudentMarks=async(req,res,next)=>{
             error.statusCode=404;
             throw error;
         }
-        const marks=await db.Mark.findAll({where:{studentId:student.id,year:year}})
+        const marks=await db.Mark.findAll({where:{studentId:student.id,year:year},include:[{model:db.subject},{model:db.User}]})
         return res.status(200).json({marks:marks})
     }catch(err){
         if(!err.statusCode){

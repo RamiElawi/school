@@ -115,7 +115,7 @@ exports.deleteQuestion=async(req,res,next)=>{
 exports.chooseSubjectAnswer=async (req,res,next)=>{
     const {answers}=req.body;//[{question:1,answer:1},{question:2,answer:2}]
     const {id}=req.params;
-    const subjectStatus='FAILED'
+    let subjectStatus='FAILED'
     let studentMark=0.0;
     try{
         // const questionNumber=await db.question.count({where:{questionableId:id,questionableType:type}})
@@ -145,13 +145,13 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
         console.log(new Date().getFullYear())
         const thisYear= parseInt(new Date().getFullYear())
         const newYear=new Date(thisYear,0,1)
-
+        const teacher=await db.User.findOne({where:{id:subject.teacherId}})
         console.log(newYear)
         if(!mark){
             await db.Mark.create({
                 studentId:req.userId,
                 mark:studentMark,
-                teacherId:subject.teacherId,
+                teacherName:`${teacher.firstName} ${teacher.midelName} ${teacher.lastName}`,
                 subjectId:id,
                 year:`${thisYear}`,
                 status:subjectStatus
@@ -161,7 +161,7 @@ exports.chooseSubjectAnswer=async (req,res,next)=>{
         mark.mark=studentMark;
         mark.status=subjectStatus;
         mark.year=`${thisYear}`
-        mark.teacherId=subject.teacherId
+        mark.teacherName=`${teacher.firstName} ${teacher.midelName} ${teacher.lastName}`
         console.log(mark.year)
         await mark.save()
         return res.status(200).json({message:'done'})

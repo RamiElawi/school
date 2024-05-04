@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.effectiveness,{through:models.request})
       User.hasMany(models.referance,{foreignKey:"teacherId"})
       User.belongsToMany(models.subject,{through:models.Mark,foreignKey:"studentId"})
-      User.hasMany(models.Mark,{foreignKey:"teacherId"})
+      // User.hasMany(models.Mark,{foreignKey:"teacherId"})
+      User.hasMany(models.Mark,{foreignKey:"studentId"})
       User.hasMany(models.rate,{foreignKey:'userId1'})
       User.hasMany(models.rate,{foreignKey:'userId2'})
       // User.hasMany(models.chat,{foreignKey:'senderId'})
@@ -27,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       // User.hasMany(models.schedules,{foreignKey:'teacherId'})
       // User.belongsToMany(models.answers,{through:models.user_answer})
       User.hasMany(models.user_answer)
-      User.hasOne(models.subject,{foreignKey:'teacherId'})
+      User.hasMany(models.subject,{foreignKey:'teacherId'})
       User.belongsToMany(models.group,{through:models.group_user})
       User.belongsToMany(models.group,{through:models.message})
       

@@ -15,9 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'studentId',
       }})
       Mark.belongsTo(models.subject,{foreignKey:'subjectId'})
-      Mark.belongsTo(models.User,{foreignKey:'teacherId',inverse: {
-        as: 'teacherId',
-      }})
+
     }
   }
   Mark.init({
@@ -31,14 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
     },
-    teacherId:{
-      type:DataTypes.INTEGER,
-      references:{
-        model:'users',
-        key:'id'
-      },
-      onDelete:'CASCADE',
-      onUpdate:'CASCADE'
+    teacherName:{
+      type:DataTypes.STRING,
     },
     subjectId:{
       type:DataTypes.INTEGER,

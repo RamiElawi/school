@@ -27,7 +27,7 @@ exports.changeStatus=async(req,res,next)=>{
     const {requestId}=req.params
     const {status}=req.body
     try{
-        const request=await db.request.findOne({id:requestId})
+        const request=await db.request.findOne({where:{id:requestId}})
         if(!request){
             const error=new Error("this request is not exists")
             error.statusCode=422;
@@ -47,7 +47,7 @@ exports.changeStatus=async(req,res,next)=>{
 exports.deleteRequest=async(req,res,next)=>{
     const {requestId}=req.params;
     try{
-        const request=await db.request.findOne({id:requestId})
+        const request=await db.request.findOne({where:{id:requestId}})
         if(!request){
             const error=new Error("this request is not exists")
             error.statusCode=422;
@@ -153,7 +153,7 @@ exports.getUnAcceptRequest=async(req,res,next)=>{
 exports.getUnthinkRequest=async(req,res,next)=>{
     const {effectId}=req.params
     try{
-        const requests=await db.request.findOne({where:{status:'NULL',effectivenessId:effectId},include:{model:db.User,include:{model:db.Section,include:{model:db.Class}}}})
+        const requests=await db.request.findOne({where:{status:null,effectivenessId:effectId},include:{model:db.User,include:{model:db.Section,include:{model:db.Class}}}})
         if(!requests){
             const error=new Error("there are no requests")
             error.statusCode=422;

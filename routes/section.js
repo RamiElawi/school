@@ -9,7 +9,7 @@ route.put('/updateSection/:sectionId',isAuth,sectionController.updateSection)
 
 route.post('/allSections',isAuth,sectionController.getAllSection)
 
-route.get('/addStudentToSection',isAuth,sectionController.addStudentToSection)
+route.post('/addStudentToSection',isAuth,sectionController.addStudentToSection)
 
 route.delete('/deleteSection/:sectionId',isAuth,sectionController.deleteSection)
 
@@ -17,7 +17,7 @@ route.delete('/deleteUserFromSection',isAuth,sectionController.deleteStudentFrom
 
 route.put('/updateSectionStudent',isAuth,sectionController.updateSectionStudent)
 
-route.get('getStudentSection/:sectionId',isAuth,sectionController.getStudentSection)
+route.get('/getStudentSection/:sectionId',isAuth,sectionController.getStudentSection)
 
 
 
