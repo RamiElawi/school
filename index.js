@@ -36,11 +36,13 @@ app.use((err,req,res,next)=>{
     })
 })
 let onlineUsers=[];
+const users = {};
+const socketToRoom = {};
 io.on('connection',socket=>{
     console.log('new connected',socket.id)
     socket.on('addNewUser',(user)=>{
         console.log("userId",user.userId)
-        onlineUsers.some((u)=> u.userId === user.userId)||
+        onlineUsers.some((u)=> u.userId === user.userId)
         onlineUsers.push({
             userId:user.userId,
             socketId:socket.id
@@ -69,6 +71,34 @@ io.on('connection',socket=>{
             socket.join(data.chatId)
             console.log(data.userId,"=",socket.rooms)
         }
+        
+        if(data.roomID != null){
+            const userId=data.userId;
+            const lessonId=data.lessonId;
+            const user=await db.User.findOne({where:{id:userId}})
+            if(user.role == 'STUDENT'){
+                await db.attendance.create({UserId:userId,lessonId:lessonId,status:'a'})
+            }
+            if (users[data.roomID]) {
+                const length = users[data.roomID].length;
+                // if (length === 4) {
+                //     socket.emit("room full");
+                //     return;
+                // }
+                users[data.roomID].push([socket.id,data.userId,user.role]);
+                console.log("userslll",users)
+            } else {
+                users[data.roomID] = [[socket.id,userId,user.role]];
+            }
+            socketToRoom[socket.id] = data.roomID;
+            const usersInThisRoom = users[data.roomID].filter(id => id[0] !== socket.id);
+    
+            socket.emit("all users", usersInThisRoom);
+            console.log("userIN this room",usersInThisRoom)
+            console.log("users",users)
+        }
+
+        // console.log("io room",[...io.sockets.adapter.rooms.get(18)].length)
     })
     
     socket.on('sendMessageToRoom',messageData=>{
@@ -78,12 +108,39 @@ io.on('connection',socket=>{
         let room=parseInt(messageData.room)
         io.to(room).emit('getMessageToRoom',sendData)
     })
+    // console.log("io socket",io.sockets)
+    // console.log("io room",io.sockets.adapter.rooms)
+    // socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+  //   socket.emit('numberStudent',[...io.sockets.adapter.rooms.get(18)])
+    //     io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  // });
+
+  // socket.on("answerCall", (data) => {
+  //   io.to(data.to).emit("callAccepted", data.signal)
+  // });
     // console.log(socket)
+
+    socket.on("sending signal", payload => {
+        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+    });
+
+    socket.on("returning signal", payload => {
+        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+    });
+
     socket.on('disconnect',()=>{
         console.log(socket.id)
         onlineUsers=onlineUsers.filter((user)=>user.socketId !== socket.id);
         console.log(onlineUsers)
         io.emit("getOnlineUsers",onlineUsers)
+
+        const roomID = socketToRoom[socket.id];
+        let room = users[roomID];
+        if (room) {
+            room = room.filter(id => id[0] !== socket.id);
+            users[roomID] = room;
+        }
+        console.log("dis users",users)
     })
 })
 
@@ -91,8 +148,6 @@ io.on('connection',socket=>{
 db.sequelize
 .sync()
 .then(()=>{
-    const server=Server.listen(process.env.PORT || 8000,console.log('server is ready'));
+    const server=Server.listen(process.env.PORT ||  8000,console.log('server is ready'));
 })
 .catch(err=>console.log(err))
-
-

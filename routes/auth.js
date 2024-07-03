@@ -79,5 +79,8 @@ router.put('/newPassword/:resetToken',
 
 router.delete('/logout',isAuth,authController.logout)
 
+router.get('/getRequest/:status',isAuth,authController.getUserRequest)
+
+router.post('/changeStatus',isAuth,authController.changeStatus)
 
 module.exports=router;

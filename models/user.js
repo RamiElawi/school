@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     midelName: DataTypes.STRING,
+    motherName:DataTypes.STRING,
+    address:DataTypes.STRING,
+    Date:DataTypes.STRING,
+    phone:DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     image: DataTypes.STRING,
@@ -68,7 +72,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete:'CASCADE',
       onUpdate:'CASCADE'
-    }
+    },
+    loginToken:{type:DataTypes.STRING,allowNull:true},
+    status:{type:DataTypes.ENUM('accepted','unaccepted'),allowNull:true}
   }, {
     sequelize,
     modelName: 'User',
