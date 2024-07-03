@@ -82,7 +82,7 @@ exports.deleteMark=async(req,res,next)=>{
     const {subjectId}=req.body
     const {studentId}=req.params
     try{
-        const student=await db.User.findOne({where:{studentId:studentId}})
+        const student=await db.User.findOne({where:{id:studentId}})
         if(!student){
             const error=new Error('this student is not found')
             error.statusCode=422;
