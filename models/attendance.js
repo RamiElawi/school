@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       attendance.belongsTo(models.User)
+      attendance.belongsTo(models.lesson)
     }
   }
   attendance.init({
@@ -33,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete:'CASACDE',
       onUpdate:'CASCADE'
     },
-    userId:{
+    UserId:{
       type:DataTypes.INTEGER,
       references:{
         model:'users',

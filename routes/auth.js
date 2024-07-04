@@ -4,21 +4,33 @@ const {body}=require('express-validator')
 const db=require('../models')
 let User=db.User;
 const isAuth=require('../config/isAuth')
+const multer=require('multer');
+const storageFile=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,'./public/userFile')
+    },
+    filename:(req,file,cb)=>{
+        const uniqueSeffex=Date.now()+'-'+Math.random(Math.random()*1E9)
+        cb(null,uniqueSeffex+'-'+file.originalname)
+    }
+})
+
+ const upload=multer({storage:storageFile})
 
 router.post('/signup',
 [
-    body('email')
-    .isEmail()
-    .withMessage('This email is not valid')
-    .custom(async(value,{req})=>{
-        const user=await User.findOne({where:{email:value}})
-        if(user){
-            const error=new Error('This email is already exists')
-            error.statusCode=422;
-            throw error;
-        }
-        return true;
-    }),
+    // body('email')
+    // .isEmail()
+    // .withMessage('This email is not valid')
+    // .custom(async(value,{req})=>{
+    //     const user=await User.findOne({where:{email:value}})
+    //     if(user){
+    //         const error=new Error('This email is already exists')
+    //         error.statusCode=422;
+    //         throw error;
+    //     }
+    //     return true;
+    // }),
     body("password")
     .trim()
     .isLength({max:6}),
@@ -33,7 +45,8 @@ router.post('/signup',
         }
         return true;
     })
-]
+],
+upload.fields([{name:'file'},{name:'image'}])
 ,authController.signup)
 
 router.post('/login',
@@ -79,8 +92,10 @@ router.put('/newPassword/:resetToken',
 
 router.delete('/logout',isAuth,authController.logout)
 
-router.get('/getRequest/:status',isAuth,authController.getUserRequest)
+router.get('/getRequest/:status',authController.getUserRequest)
 
-router.post('/changeStatus',isAuth,authController.changeStatus)
+router.post('/changeStatus',authController.changeStatus)
+
+router.post('/signupParents',upload.single('image'),authController.signupParents)
 
 module.exports=router;

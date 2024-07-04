@@ -281,3 +281,45 @@ try{
     next(err);
 }
 }
+
+exports.signupParents=async (req,res,next)=>{
+    const {firstName,lastName,midelName,email,address,phone,motherName,password,sonNumber}=req.body
+    try{
+        const isExsit=await User.findOne({where:{email:email}})
+        if(isExsit){
+            const error=new Error('this email is alredy exist')
+            error.statusCode=422;
+            throw error;
+        }
+        const son=await User.findOne({where:{studentNumber:sonNumber}})
+        if(!son){
+            const error=new Error('this stundent is not found')
+            error.statusCode=422;
+            throw error;
+        }
+        const hashPassword=await bcrypt.hash(password,12);
+        const user=await User.create({
+            firstName:firstName,
+            lastName:lastName,
+            midelName:midelName,
+            motherName:motherName,
+            email:email,
+            password:hashPassword,
+            role:'PARENT',
+            address:address,
+            phone:phone,
+            status:null,
+            image:req.file.path
+        })
+        const father=await db.father.create({
+            fatherId:user.id,
+            studentId:son.id
+        })
+        return res.status(200).json({message:"signup is done"})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}

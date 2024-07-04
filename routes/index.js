@@ -12,7 +12,7 @@ const lessonRouter=require('./lesson')
 const classRouter=require('./class')
 const sectionRouter=require('./section')
 const scheduleRouter=require('./schedule') 
-
+const attendaceRouter=require('./attendance')
 
 route.use('/auth',authRouter);
 route.use('/user',userRouter);
@@ -26,5 +26,6 @@ route.use('/chat',chatRouter)
 route.use('/class',classRouter)
 route.use('/section',sectionRouter)
 route.use('/schedule',scheduleRouter)
+route.use('/attendace',attendaceRouter)
 
 module.exports=route;

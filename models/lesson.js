@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       lesson.hasMany(models.file,{foreignKey:'fileableId',constraints:false,scope:{fileableType:'Lesson'}})
       lesson.hasMany(models.question,{foreignKey:'questionableId',constraints:false,scope:{fileableType:'Lesson'}})
       lesson.belongsTo(models.Section)
+      // lesson.hasMany(models.attendance)
     }
   }
   lesson.init({
