@@ -80,12 +80,12 @@ exports.getScheduleSection=async(req,res,next)=>{
     let TimeSlots=[]
     let subjects=[]
     try{
-        const schedule=await db.schedules.findAll({where:{SectionId:sectionId},include:[{model:db.Section,include:{model:db.Class}},{model:db.subject,include:{ association: 'User'}}],order:[['hour','ASC']]})
+        const schedule=await db.schedules.findAll({where:{SectionId:sectionId},include:[{model:db.Section,include:{model:db.Class}},{model:db.subject,include:{ association: 'User'}}],order:[['hour','ASC'],['day','ASC']]})
         schedule.forEach(sch=>{
             // console.log(sch.subject.Users[0])
             TimeSlots.push(sch.hour)
             daysOfWeek.push(sch.day)
-            subjects.push([sch.id,sch.subject.name,`${sch.Section.Class.name}-${sch.Section.sectionNumber}`,`${sch.subject.User.firstName} ${sch.subject.User.lastName}`])
+            subjects.push([sch.hour,sch.id,sch.subject.name,`${sch.Section.Class.name}-${sch.Section.sectionNumber},${sch.subject.User.firstName} ${sch.subject.User.lastName}`])
         })
         return res.status(200).json({days:daysOfWeek,time:TimeSlots,subjects:subjects})
     }catch(err){
@@ -105,7 +105,7 @@ exports.getSchedule=async(req,res,next)=>{
         allschedule.forEach(sch=>{
             TimeSlots.push(sch.hour)
             daysOfWeek.push(sch.day)
-            subjects.push([sch.id,sch.subject.name,`${sch.Section.Class.name}-${sch.Section.sectionNumber}`,`${sch.User.firstName} ${sch.User.lastName}`])
+            subjects.push([sch.id,sch.subject.name,`${sch.Section.Class.name}-${sch.Section.sectionNumber},${sch.User.firstName} ${sch.User.lastName}`])
         })        
         return res.status(200).json({days:daysOfWeek,time:TimeSlots,subjects:subjects})
     }catch(err){

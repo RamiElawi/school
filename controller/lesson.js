@@ -19,6 +19,14 @@ exports.addLesson=async(req,res,next)=>{
             ,path:req.file.path,
             name:req.file.originalname.split('.')[0]
         })
+        const user=await db.User.findAll({where:{sectionId:sectionId}})
+        user.forEach(async element => {
+            const att=await db.attendance.create({
+                UserId:element.id,
+                lessonId:lesson.id,
+                status:'na'
+            })
+        });
         return res.status(200).json({message:'create lesson is done',lesson:lesson,file:File})
     }catch(err){
         if(!err.statusCode){

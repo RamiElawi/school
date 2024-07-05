@@ -54,14 +54,17 @@ exports.updateMark=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        const studentMark=await db.Mark.findOne({studentId:studentId,subjectId:subjectId})
+        const studentMark=await db.Mark.findOne({where:{studentId:studentId,subjectId:subjectId}})
+        // console.log(studentMark)
         if(!studentMark){
             const error=new Error('this student is not found')
             error.statusCode=422;
             throw error;
         }
         const subject=await db.subject.findOne({where:{id:subjectId}})
-        if(mark>=subject.minimum_success){
+        
+        if(mark>=subject.minimumSuccess){
+            console.log("ddd")
             status='SUCCESSFUL'
         }
         const teacher=await db.User.findOne({where:{id:req.userId}})
@@ -103,7 +106,6 @@ exports.deleteMark=async(req,res,next)=>{
     next(err);
 }
 }
-
 exports.getSubjectMarks=async(req,res,next)=>{
     const subjectId=req.params.subjectId;
     const year=req.body.year;

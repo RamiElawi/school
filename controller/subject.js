@@ -1,6 +1,6 @@
 const db=require('../models')
 exports.addSubject=async(req,res,next)=>{
-    const {name,minimumSuccess,teacherId}=req.body;
+    const {name,minimumSuccess,teacherId,ClassId}=req.body;
     try{
         if(!req.file){
             const error=new Error('there is no file')
@@ -13,7 +13,8 @@ exports.addSubject=async(req,res,next)=>{
             // image:req.file.image,
             minimumSuccess:minimumSuccess,
             teacherId:teacherId,
-            image:req.file.path
+            image:req.file.path,
+            ClassId:ClassId
         })
         return res.status(200).json({message:'the subject has been created'})
     }catch(err){
@@ -77,7 +78,8 @@ exports.deleteSubject=async(req,res,next)=>{
 
 exports.getSubjects=async(req,res,next)=>{
     try{
-        const subjects=await db.subject.findAll({include:{ association: 'User'}});
+        const classId=req.params.classId
+        const subjects=await db.subject.findAll({where:{classId:classId},include:{ association: 'User'}});
         if(!subjects){
             subjects='there are no subjects'
         }
@@ -138,7 +140,6 @@ exports.addReferance=async(req,res,next)=>{
     next(err);
 }
 }
-
 exports.updateReferance=async(req,res,next)=>{
     const {description,name,type}=req.body;
     const referanceId=req.params.referanceId

@@ -21,7 +21,7 @@ router.put('/updateSubject/:subjectId',isAuth,chechRole(['ADMIN']),upload.single
 
 router.delete('/deleteSubject/:subjectId',isAuth,chechRole(['ADMIN']),subjectController.deleteSubject)
 
-router.get('/getAllSubject',subjectController.getSubjects)
+router.get('/getAllSubject/:classId',subjectController.getSubjects)
 
 router.get('/getSubject/:subjectId',subjectController.getSubject)
 

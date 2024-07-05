@@ -77,7 +77,10 @@ io.on('connection',socket=>{
             const lessonId=data.lessonId;
             const user=await db.User.findOne({where:{id:userId}})
             if(user.role == 'STUDENT'){
-                await db.attendance.create({UserId:userId,lessonId:lessonId,status:'a'})
+                const att=await db.attendance.findOne({where:{UserId:userId,lessonId:lessonId}})
+                att.status='a'
+                await att.save()
+                // await db.attendance.create({UserId:userId,lessonId:lessonId,status:'a'})
             }
             if (users[data.roomID]) {
                 const length = users[data.roomID].length;

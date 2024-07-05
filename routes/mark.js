@@ -12,7 +12,7 @@ router.post('/getSubjectMarks/:subjectId',isAuth,markController.getSubjectMarks)
 
 router.post('/getStudentMark',isAuth,markController.getStudentMark)
 
-router.post('/getStudentMarks/:studentId',isAuth,markController.getStudentMarks)
+router.post('/getStudentMarks',isAuth,markController.getStudentMarks)
 
 router.post('/getStudentMarksByName',isAuth,markController.getStudentMakrsByName)
 
