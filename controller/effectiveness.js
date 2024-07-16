@@ -8,7 +8,12 @@ exports.addEffectiveness=async(req,res,next)=>{
             error.statusCode=422;
             throw error;
         }
-        await db.effectiveness.create({title,description,startDate,endDate})
+        if(!req.file){
+            const error=new Error('you dont choose file')
+            error.statusCode=422;
+            throw error;
+        }
+        await db.effectiveness.create({title,description,startDate,endDate,image:req.file.path})
         return res.status(200).json({message:'done'})
     }catch(err){
         if(!err.statusCode){
@@ -65,11 +70,18 @@ exports.updateEffectiveness=async(req,res,next)=>{
             const error=new Error('this is wrroing')
             error.statusCode=422;
             throw error;
+        }  
+        let eff_image=effect.image;
+        if(req.file){
+            require('../config/clearImage').clearImage(eff_image)
+            eff_image=req.file.path;
         }
+        subject.image=eff_image;
         effect.title=title;
         effect.description=description;
         effect.startDate=startDate
         effect.endDate=endDate
+        effect.image=req.file.path
         await effect.save()
         return res.status(200).json({message:"effect has been updated"})
     }catch(err){

@@ -172,6 +172,25 @@ exports.getUserRequest=async(req,res,next)=>{
     }
 }
 
+exports.deleteRequest=async(req,res,next)=>{
+    const {requestId}=req.params;
+    try{
+        const request= await User.findOne({where:{id:requestId}})
+        if(!request){
+            const error=new Error('this request is not found')
+            error.statusCode=422;
+            throw error;
+        }
+        await request.destroy()
+        return res.status(200).json({message:'request is deleted'})
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode=500
+        }
+        next(err)
+    }
+}
+
 exports.refreshToken=async(req,res,next)=>{
     const {refreshToken}=req.body;
 

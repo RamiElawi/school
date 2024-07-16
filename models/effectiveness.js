@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     startDate:DataTypes.DATE,
-    endDate:DataTypes.DATE
+    endDate:DataTypes.DATE,
+    image:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'effectiveness',

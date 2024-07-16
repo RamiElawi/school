@@ -94,6 +94,8 @@ router.delete('/logout',isAuth,authController.logout)
 
 router.get('/getRequest/:status',authController.getUserRequest)
 
+router.delete('/deleteRequest/:requestId',authController.deleteRequest)
+
 router.post('/changeStatus',authController.changeStatus)
 
 router.post('/signupParents',upload.single('image'),authController.signupParents)

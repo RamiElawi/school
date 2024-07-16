@@ -45,6 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
+    },
+    description:{
+      type:DataTypes.STRING
     }
   }, {
     sequelize,
